@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+:root {
+  /* COLORS */
+
+  --dark-primary  : #292B2F;
+  --dark-secondary: #2E3036;
+  --dark-third    : #37393F;
+
+  --light-primary  : #EFEFEF;
+  --light-secondary: #F2F3F5;
+  --light-third    : #FFFFFF;
+
+  --attention-primary  : #FFB500;
+  --attention-secondary: #00BA4A;
+  --attention-third    : #CE331D;
+
+  /* SIZES*/
+
+  --head-1 : 1.5rem;
+  --head-2 : 1.125rem;
+  --head-3 : 0.875rem;
+  --body   : 0.75rem;
+  --caption: 0.688rem;
+}
+
+@layer base {
+
+  h1,
+  h2,
+  h3 {
+    font-weight: 700;
+  }
+
+  h1 {
+    font-size: var(--head-1);
+  }
+
+  h2 {
+    font-size: var(--head-2);
+  }
+
+  h3,
+  p,
+  button {
+    font-size: var(--head-3);
+  }
+
+  a,
+  ul,
+  ol,
+  li {
+    font-size  : var(--body);
+    font-weight: 500;
+  }
+
+  span {
+    font-size  : var(--caption);
+    font-weight: 400;
+  }
+
+  button {
+    cursor: pointer;
+  }
+}
+
+
+.input-error {
+  border: 1px solid #ff0000 !important;
+}
