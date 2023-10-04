@@ -40,3 +40,13 @@ export const deleteChars = cadena => {
 
   return cadena.replace(/[áéíóúÁÉÍÓÚ]/g, l => tildes[l] || l)
 }
+
+export const validCredits = credits => {
+  if (credits === '') return false
+  return !(credits >= 2 && credits <= 4)
+}
+
+export const validtTextarea = (text, max, min) => {
+  if (text === '') return false
+  return (text.length < min || text.length > max)
+}

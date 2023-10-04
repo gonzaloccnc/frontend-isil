@@ -93,7 +93,7 @@ export const LoginForm = () => {
         <Button
           isLoading={loading}
           isDisabled={isInvalidEmail || isInvalidPassword || fields.email === '' || fields.password === ''}
-          onClick={handleClick}
+          onPress={handleClick}
           color='primary'
           size='lg'
           className='py-7'

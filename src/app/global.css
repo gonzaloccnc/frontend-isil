@@ -4,22 +4,6 @@
 
 
 :root {
-  /* COLORS */
-
-  --dark-primary  : #292B2F;
-  --dark-secondary: #2E3036;
-  --dark-third    : #37393F;
-
-  --light-primary  : #EFEFEF;
-  --light-secondary: #F2F3F5;
-  --light-third    : #FFFFFF;
-
-  --attention-primary  : #FFB500;
-  --attention-secondary: #00BA4A;
-  --attention-third    : #CE331D;
-
-  /* SIZES*/
-
   --head-1 : 1.5rem;
   --head-2 : 1.125rem;
   --head-3 : 0.875rem;
@@ -64,6 +48,17 @@
 
   button {
     cursor: pointer;
+  }
+
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin            : 0;
+  }
+
+  /* Firefox */
+  input[type=number] {
+    -moz-appearance: textfield;
   }
 }
 

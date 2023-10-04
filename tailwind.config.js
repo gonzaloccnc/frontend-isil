@@ -9,16 +9,17 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'dark-primary': '#292B2F',
+        'dark-primary': '#212229',
         'dark-secondary': '#2E3036',
-        'dark-third': '#37393F',
+        'dark-third': '#292B2F',
+
         'light-primary': '#EFEFEF',
         'light-secondary': '#F2F3F5',
         'light-third': '#FFFFFF',
-        'attention-primary': '#FFB500',
-        'attention-secondary': '#00BA4A',
-        'attention-third': '#CE331D',
-        'color-isil': '#00adee',
+
+        primary: '#237FEA',
+        'att-secondary': '#00BA4A',
+        third: '#CE331D',
         auth: '#202433',
         inputs: '#33394F'
       },
@@ -61,12 +62,12 @@ module.exports = {
       dark: {
         colors: {
           primary: {
-            DEFAULT: '#FFB500'
+            DEFAULT: '#237FEA'
           },
           secondary: {
-            DEFAULT: '#00BA4A'
+            DEFAULT: '#FFA100'
           },
-          background: '#292B2F'
+          background: '#212229'
         }
       }
     }

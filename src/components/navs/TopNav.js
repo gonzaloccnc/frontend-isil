@@ -10,7 +10,7 @@ export const TopNav = () => {
   const name = data?.user.name
 
   return (
-    <header className='w-[calc(100%_-_80px)] h-20 fixed top left-20 bg-dark-third flex items-center justify-between py-[15px] px-[30px] z-50 text-white'>
+    <header className='w-[calc(100%_-_80px)] h-20 fixed top left-20 bg-dark-primary flex items-center justify-between py-[15px] px-[30px] z-50 text-white border-b border-[rgba(255,255,255,0.3)]'>
       <h1>ISIL+</h1>
 
       <div className='flex items-center gap-[15px]'>
@@ -30,7 +30,7 @@ export const TopNav = () => {
             placement='bottom' offset={6}
             showArrow
             size='sm'
-            classNames={{ base: 'bg-color-isil', arrow: 'bg-color-isil mt-1' }}
+            classNames={{ base: 'bg-primary', arrow: 'bg-primary mt-1' }}
           >
             <Avatar
               showFallback
@@ -48,7 +48,7 @@ export const TopNav = () => {
             placement='bottom' offset={6}
             showArrow
             size='sm'
-            classNames={{ base: 'bg-color-isil', arrow: 'bg-color-isil mt-1' }}
+            classNames={{ base: 'bg-primary', arrow: 'bg-primary mt-1' }}
           >
             <button type='button' onClick={() => { signOut() }}>
               <IconExit />

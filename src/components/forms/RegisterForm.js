@@ -177,7 +177,7 @@ export const RegisterForm = () => {
         <Button
           isLoading={loading}
           isDisabled={isInvalidAll || allIsEmpty}
-          onClick={handleClick}
+          onPress={handleClick}
           color='primary'
           size='lg'
           className='py-7'

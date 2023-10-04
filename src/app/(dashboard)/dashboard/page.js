@@ -6,8 +6,8 @@ const DashboardHomePage = async () => {
   const username = session.user.name.split(' ')[0] + ' ' + session.user.name.split(' ')[2]
 
   return (
-    <>
-      <section className='bg-dark-third row-dash-greeting col-dash-greeting rounded-lg p-3 flex gap-3'>
+    <section className='grid grid-cols-3 grid-rows-[200px_350px_350px] gap-4'>
+      <section className='bg-dark-secondary row-dash-greeting col-dash-greeting rounded-lg p-3 flex gap-3'>
         <div className='grid place-content-center'>
           <img
             src='/images/insight.png'
@@ -33,30 +33,30 @@ const DashboardHomePage = async () => {
         </div>
       </section>
 
-      <section className='bg-dark-third rounded-lg p-4'>
+      <section className='bg-dark-secondary rounded-lg p-4'>
         progreso
       </section>
 
-      <section className='bg-dark-third rounded-lg p-4 row-dash-statistics col-dash-statistics'>
+      <section className='bg-dark-secondary rounded-lg p-4 row-dash-statistics col-dash-statistics'>
         estadisticas
       </section>
 
-      <section className='bg-dark-third rounded-lg p-4'>
+      <section className='bg-dark-secondary rounded-lg p-4'>
         clases del dia
       </section>
 
-      <section className='bg-dark-third rounded-lg p-4'>
+      <section className='bg-dark-secondary rounded-lg p-4'>
         calendario
       </section>
 
-      <section className='bg-dark-third rounded-lg p-4'>
+      <section className='bg-dark-secondary rounded-lg p-4'>
         to do list
       </section>
 
-      <section className='bg-dark-third rounded-lg p-4'>
+      <section className='bg-dark-secondary rounded-lg p-4'>
         foros
       </section>
-    </>
+    </section>
   )
 }
 

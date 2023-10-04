@@ -7,16 +7,16 @@ import Link from 'next/link'
 
 export const AdminNav = () => {
   return (
-    <div className='flex gap-x-[15px] flex-col mt-5'>
+    <div className='flex flex-col mt-5'>
       <Tooltip
         content='Inicio'
         key='right-end-inicio'
         placement='right-end' offset={6}
         showArrow
-        classNames={{ base: 'bg-color-isil', arrow: 'bg-color-isil mt-1' }}
+        classNames={{ base: 'bg-primary', arrow: 'bg-primary mt-1' }}
       >
         <Link href='/dashboard'
-          className='w-full h-[50px] grid place-content-center relative rounded-md text-white hover:bg-color-isil hover:text-black'>
+          className='w-full h-[50px] grid place-content-center relative rounded-md text-white hover:bg-primary hover:text-black'>
           <IconHome />
         </Link>
       </Tooltip>
@@ -26,10 +26,10 @@ export const AdminNav = () => {
         key='right-end-cursos'
         placement='right-end' offset={6}
         showArrow
-        classNames={{ base: 'bg-color-isil', arrow: 'bg-color-isil mt-1' }}
+        classNames={{ base: 'bg-primary', arrow: 'bg-primary mt-1' }}
       >
-        <Link href='/dashboard/courses'
-          className='w-full h-[50px] grid place-content-center relative rounded-md text-white hover:bg-color-isil hover:text-black'>
+        <Link href='/dashboard/admin/courses'
+          className='w-full h-[50px] grid place-content-center relative rounded-md text-white hover:bg-primary hover:text-black'>
           <IconCourse />
         </Link>
       </Tooltip>
@@ -39,10 +39,10 @@ export const AdminNav = () => {
         key='right-end-clases'
         placement='right-end' offset={6}
         showArrow
-        classNames={{ base: 'bg-color-isil', arrow: 'bg-color-isil mt-1' }}
+        classNames={{ base: 'bg-primary', arrow: 'bg-primary mt-1' }}
       >
-        <Link href='/dashboard/class'
-          className='w-full h-[50px] grid place-content-center relative rounded-md text-white hover:bg-color-isil hover:text-black'>
+        <Link href='/dashboard/admin/class'
+          className='w-full h-[50px] grid place-content-center relative rounded-md text-white hover:bg-primary hover:text-black'>
           <IconClass />
         </Link>
       </Tooltip>
@@ -52,10 +52,10 @@ export const AdminNav = () => {
         key='right-end-config'
         placement='right-end' offset={6}
         showArrow
-        classNames={{ base: 'bg-color-isil', arrow: 'bg-color-isil mt-1' }}
+        classNames={{ base: 'bg-primary', arrow: 'bg-primary mt-1' }}
       >
         <Link href='/settings'
-          className='w-full h-[50px] grid place-content-center relative rounded-md text-white hover:bg-color-isil hover:text-black'>
+          className='w-full h-[50px] grid place-content-center relative rounded-md text-white hover:bg-primary hover:text-black'>
           <IconSettings />
         </Link>
       </Tooltip>

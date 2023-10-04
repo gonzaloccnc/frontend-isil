@@ -20,10 +20,10 @@ export const UserNav = ({ role }) => {
         key='right-end-inicio'
         placement='right-end' offset={6}
         showArrow
-        classNames={{ base: 'bg-color-isil', arrow: 'bg-color-isil mt-1' }}
+        classNames={{ base: 'bg-primary', arrow: 'bg-primary mt-1' }}
       >
         <Link href='/dashboard'
-          className='w-full h-[50px] grid place-content-center relative rounded-md text-white hover:bg-color-isil hover:text-black'>
+          className='w-full h-[50px] grid place-content-center relative rounded-md text-white hover:bg-primary hover:text-black'>
           <IconHome />
         </Link>
       </Tooltip>
@@ -33,10 +33,10 @@ export const UserNav = ({ role }) => {
         key='right-end-cursos'
         placement='right-end' offset={6}
         showArrow
-        classNames={{ base: 'bg-color-isil', arrow: 'bg-color-isil mt-1' }}
+        classNames={{ base: 'bg-primary', arrow: 'bg-primary mt-1' }}
       >
         <Link href='/dashboard/courses'
-          className='w-full h-[50px] grid place-content-center relative rounded-md text-white hover:bg-color-isil hover:text-black'>
+          className='w-full h-[50px] grid place-content-center relative rounded-md text-white hover:bg-primary hover:text-black'>
           <IconCourse />
         </Link>
       </Tooltip>
@@ -46,10 +46,10 @@ export const UserNav = ({ role }) => {
         key='right-end-clases'
         placement='right-end' offset={6}
         showArrow
-        classNames={{ base: 'bg-color-isil', arrow: 'bg-color-isil mt-1' }}
+        classNames={{ base: 'bg-primary', arrow: 'bg-primary mt-1' }}
       >
         <Link href='/dashboard/class'
-          className='w-full h-[50px] grid place-content-center relative rounded-md text-white hover:bg-color-isil hover:text-black'>
+          className='w-full h-[50px] grid place-content-center relative rounded-md text-white hover:bg-primary hover:text-black'>
           <IconClass />
         </Link>
       </Tooltip>
@@ -59,10 +59,10 @@ export const UserNav = ({ role }) => {
         key='right-end-grupos'
         placement='right-end' offset={6}
         showArrow
-        classNames={{ base: 'bg-color-isil', arrow: 'bg-color-isil mt-1' }}
+        classNames={{ base: 'bg-primary', arrow: 'bg-primary mt-1' }}
       >
         <Link href='/dashboard/groups' data-tooltip='Grupos'
-          className='w-full h-[50px] grid place-content-center relative rounded-md text-white hover:bg-color-isil hover:text-black'>
+          className='w-full h-[50px] grid place-content-center relative rounded-md text-white hover:bg-primary hover:text-black'>
           <IconGroups />
         </Link>
       </Tooltip>
@@ -72,10 +72,10 @@ export const UserNav = ({ role }) => {
         key='right-end-calendario'
         placement='right-end' offset={6}
         showArrow
-        classNames={{ base: 'bg-color-isil', arrow: 'bg-color-isil mt-1' }}
+        classNames={{ base: 'bg-primary', arrow: 'bg-primary mt-1' }}
       >
         <Link href='/dashboard/calendar'
-          className='w-full h-[50px] grid place-content-center relative rounded-md text-white hover:bg-color-isil hover:text-black'>
+          className='w-full h-[50px] grid place-content-center relative rounded-md text-white hover:bg-primary hover:text-black'>
           <IconCalendar />
         </Link>
       </Tooltip>
@@ -88,10 +88,10 @@ export const UserNav = ({ role }) => {
             key='right-end-todos'
             placement='right-end' offset={6}
             showArrow
-            classNames={{ base: 'bg-color-isil', arrow: 'bg-color-isil mt-1' }}
+            classNames={{ base: 'bg-primary', arrow: 'bg-primary mt-1' }}
           >
             <Link href='/dashboard/todos'
-              className='w-full h-[50px] grid place-content-center relative rounded-md text-white hover:bg-color-isil hover:text-black'>
+              className='w-full h-[50px] grid place-content-center relative rounded-md text-white hover:bg-primary hover:text-black'>
               <IconTodos />
             </Link>
           </Tooltip>
@@ -102,10 +102,10 @@ export const UserNav = ({ role }) => {
         key='right-end-chats'
         placement='right-end' offset={6}
         showArrow
-        classNames={{ base: 'bg-color-isil', arrow: 'bg-color-isil mt-1' }}
+        classNames={{ base: 'bg-primary', arrow: 'bg-primary mt-1' }}
       >
         <Link href='/dashboard/chats'
-          className='w-full h-[50px] grid place-content-center relative rounded-md text-white hover:bg-color-isil hover:text-black'>
+          className='w-full h-[50px] grid place-content-center relative rounded-md text-white hover:bg-primary hover:text-black'>
           <IconChats />
         </Link>
       </Tooltip>
@@ -115,10 +115,10 @@ export const UserNav = ({ role }) => {
         key='right-end-config'
         placement='right-end' offset={6}
         showArrow
-        classNames={{ base: 'bg-color-isil', arrow: 'bg-color-isil mt-1' }}
+        classNames={{ base: 'bg-primary', arrow: 'bg-primary mt-1' }}
       >
         <Link href='/settings'
-          className='w-full h-[50px] grid place-content-center relative rounded-md text-white hover:bg-color-isil hover:text-black'>
+          className='w-full h-[50px] grid place-content-center relative rounded-md text-white hover:bg-primary hover:text-black'>
           <IconSettings />
         </Link>
       </Tooltip>

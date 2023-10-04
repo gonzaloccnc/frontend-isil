@@ -13,7 +13,7 @@ const RegisterPage = () => {
 
       <div className='text-center'>
         <p>¿Ya tienes una cuenta?,
-          <Link href='/login' className='text-attention-primary'>
+          <Link href='/login' className='text-primary'>
             {' '}Iniciar sesión
           </Link>
         </p>

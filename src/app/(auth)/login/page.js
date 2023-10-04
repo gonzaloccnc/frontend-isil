@@ -13,12 +13,12 @@ const LoginPage = async () => {
 
       <div className='text-center'>
         <p>¿Olvidaste tu contraseña?,
-          <Link href='/forget-password' className='text-attention-primary'>
+          <Link href='/forget-password' className='text-primary'>
             {' '}Recuperar mi contraseña
           </Link>
         </p>
         <p>¿No tienes cuenta?,
-          <Link href='/register' className='text-attention-primary'>
+          <Link href='/register' className='text-primary'>
             {' '}Registrarse
           </Link>
         </p>

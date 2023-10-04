@@ -1,7 +1,12 @@
+import { CoursesNav } from '@/components/navs/CoursesNav'
+import { ContentCourse } from './ContentCourse'
 
-const CoursePage = () => {
+const CoursePage = async () => {
   return (
-    <div>Course page</div>
+    <section>
+      <CoursesNav />
+      <ContentCourse />
+    </section>
   )
 }
 
