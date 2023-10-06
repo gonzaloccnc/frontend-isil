@@ -26,7 +26,7 @@ export const PdfModal = ({ file, isOpen, onOpenChange }) => {
               <ModalFooter>
                 <Button color='danger' variant='light'
                   onPress={onClose}>
-                  Close
+                  Cerrar
                 </Button>
                 <a download href={downloadable}>
                   <Button color='primary'>

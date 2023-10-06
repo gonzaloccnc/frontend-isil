@@ -1,13 +1,31 @@
 'use client'
 import { Button, Divider, useDisclosure, Dropdown, DropdownTrigger, DropdownItem, DropdownMenu } from '@nextui-org/react'
-import { AddCourseModal } from '../modals/AddCourseModal'
+import { FormModal } from '../modals/FormModal'
 import { PaginationWrap } from '../pagination/PaginationWrap'
 import { useAdminContext } from '@/hooks/useAdminContext'
+import { CourseForm } from '../forms/CourseForm'
+import { useRef } from 'react'
+import { axiosClientSameServer } from '@/lib/axios'
 
 export const CoursesNav = () => {
   const { courses } = useAdminContext()
-  const { isOpen, onOpen, onOpenChange } = useDisclosure()
+  const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
+  const formRef = useRef(null)
 
+  const onUploadFile = async () => {
+    const form = new FormData(formRef.current)
+
+    try {
+      const resp = await axiosClientSameServer.post('/course', form, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      console.log(resp)
+    } catch (er) {
+      console.log(er)
+    }
+  }
   return (
     <>
       <nav className='w-full flex items-center justify-between'>
@@ -40,10 +58,17 @@ export const CoursesNav = () => {
           </Button>
         </div>
       </nav>
-      <AddCourseModal
+      <FormModal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
-      />
+        title='Agregar curso'
+      >
+        <CourseForm
+          onClose={onClose}
+          formRef={formRef}
+          onSuccess={onUploadFile}
+        />
+      </FormModal>
     </>
   )
 }

@@ -1,18 +1,55 @@
 'use client'
-import { Card, CardHeader, CardBody, CardFooter, Button, Chip, Tooltip, useDisclosure } from '@nextui-org/react'
+import { Card, CardHeader, CardBody, CardFooter, Chip, Tooltip, useDisclosure } from '@nextui-org/react'
 import { IcoArrowRight } from '../icons/IcoArrowRight'
 import { useRouter } from 'next/navigation'
 import { PdfModal } from '../modals/PdfModal'
 import { WarningModal } from '../modals/WarningModal'
-import { axiosCLient } from '@/lib/axios'
+import { axiosCLient, axiosClientSameServer } from '@/lib/axios'
 import { useSession } from 'next-auth/react'
+import { DropDown } from '../dropdown/DropDown'
+import { useMemo, useRef } from 'react'
+import { FormModal } from '../modals/FormModal'
+import { CourseForm } from '../forms/CourseForm'
 
 export const CourseCard = ({ id, title, description, syllabus, contents, credits }) => {
   const { data } = useSession()
+  const formRef = useRef(null)
   const router = useRouter()
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
+  const { isOpen: isOpenUpdate, onOpen: onOpenUpdate, onClose: onCloseUpdate, onOpenChange: onOpenChangeUpdate } = useDisclosure()
   const { isOpen: isOpenDelete, onOpen: onOpenDelete, onOpenChange: onOpenChangeDelete } = useDisclosure()
   const bearer = 'Bearer ' + data.user.accessToken
+  const courseActions = useMemo(() => {
+    return [{
+      label: 'Ver documento',
+      color: 'primary',
+      onClick: onOpen
+    }, {
+      label: 'Actualizar',
+      color: 'success',
+      onClick: onOpenUpdate
+    }, {
+      label: 'Eliminar',
+      color: 'danger',
+      onClick: onOpenDelete
+    }]
+  }, [])
+
+  const handleUpdate = async () => {
+    const form = new FormData(formRef.current)
+    form.set('url', syllabus)
+
+    try {
+      const resp = await axiosClientSameServer.patch(`/course/${id}`, form, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      console.log(resp)
+    } catch (er) {
+      console.log(er)
+    }
+  }
 
   const handleDelete = async () => {
     await axiosCLient.post('/admin/courses', null, {
@@ -30,9 +67,10 @@ export const CourseCard = ({ id, title, description, syllabus, contents, credits
             placement='right-end'
             offset={6}
             color='primary'
+
           >
             <p
-              className='text-tiny uppercase font-bold flex items-center gap-2 cursor-pointer'
+              className='text-tiny uppercase font-bold flex items-center gap-2 cursor-pointer text-primary-500'
               onClick={() => { router.push(`/dashboard/admin/courses/${id}`) }}
             >
               {title} <IcoArrowRight />
@@ -51,15 +89,7 @@ export const CourseCard = ({ id, title, description, syllabus, contents, credits
           <p>{description}</p>
         </CardBody>
         <CardFooter className='flex gap-2 items-center'>
-          <Button color='primary' onPress={onOpen}>
-            Ver documento
-          </Button>
-          <Button color='success' className='text-white' >
-            Actualizar
-          </Button>
-          <Button color='danger' onPress={onOpenDelete}>
-            Eliminar
-          </Button>
+          <DropDown items={courseActions} />
         </CardFooter>
       </Card>
       <PdfModal
@@ -73,6 +103,21 @@ export const CourseCard = ({ id, title, description, syllabus, contents, credits
         onDelete={handleDelete}
         title={`Estas seguro de eliminar "${title}"`}
       />
+      <FormModal
+        isOpen={isOpenUpdate}
+        onOpenChange={onOpenChangeUpdate}
+        title='Actualizar curso'
+      >
+        <CourseForm
+          onClose={onCloseUpdate}
+          initForm={{
+            title, description, contents, credits, fileSyllabus: { file: null, error: null }
+          }}
+          formRef={formRef}
+          onSuccess={handleUpdate}
+          isUpdatable
+        />
+      </FormModal>
     </>
   )
 }
