@@ -1,12 +1,26 @@
-import { deleteResourcePromise, uploadToPromise } from '@/lib/uploadFileCLoud'
+import { axiosServer } from '@/lib/axios'
+import { uploadToPromise } from '@/lib/uploadFileCLoud'
 import { NextResponse } from 'next/server'
 
 export const PATCH = async (req, { params }) => {
   const data = await req.formData()
   const image = data.get('syllabus')
-  const idPrevImage = data.get('url').split('/syllabus/')[1].split('.pdf')[0]
+  const token = data.get('token')
+  // const idPrevImage = data.get('url').split('/syllabus/')[1].split('.pdf')[0]
 
-  console.log(idPrevImage)
+  const courseMap = {
+    courseName: '',
+    credits: 0,
+    syllabus: data.get('url'),
+    description: ''
+  }
+
+  data.forEach((x, y) => {
+    if (y === 'token' || y === 'url') return
+    courseMap[y] = x
+  })
+
+  courseMap.syllabus = data.get('url')
 
   if (image.size !== 0) {
     // subir y elimar la iamgen anterior
@@ -15,18 +29,26 @@ export const PATCH = async (req, { params }) => {
     const buffer = Buffer.from(bytes)
 
     try {
-      await deleteResourcePromise(idPrevImage)
+      // await deleteResourcePromise(idPrevImage)
       const result = await uploadToPromise(buffer)
-      data.set('url', result.url)
+      courseMap.syllabus = result.url
       console.log(result.url)
     } catch (ex) {
       console.log(ex.message)
+      NextResponse.json({ ok: false, data: null })
     }
   }
 
-  // patch to java backend
-  console.log('no hay iamgen')
-
-  console.log(params)
-  return NextResponse.json({ ok: true, data: null })
+  console.log(courseMap)
+  try {
+    const { data } = await axiosServer.put(`/admin/course/update/${params.id}`, courseMap, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    return NextResponse.json({ ok: true, data })
+  } catch (ex) {
+    console.log(ex.response)
+    NextResponse.json({ ok: false, data: null })
+  }
 }

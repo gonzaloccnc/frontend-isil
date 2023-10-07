@@ -1,10 +1,10 @@
 import { useForm } from '@/hooks/useForm'
 import { validCredits, validtTextarea } from '@/lib/formValid'
 import { Button, Input, ModalBody, ModalFooter, Textarea } from '@nextui-org/react'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 
 const init = {
-  title: '',
+  courseName: '',
   credits: 2,
   fileSyllabus: {
     file: null,
@@ -14,6 +14,7 @@ const init = {
 }
 
 export const CourseForm = ({ onClose, onSuccess, formRef, isUpdatable = false, initForm = init }) => {
+  const [loading, setLoading] = useState(false)
   const { fields, changeFields, clearInput, clearAll } = useForm(initForm)
   const isInvalidCredits = useMemo(() => {
     return validCredits(fields.credits)
@@ -36,18 +37,18 @@ export const CourseForm = ({ onClose, onSuccess, formRef, isUpdatable = false, i
         <form className='flex flex-col w-[500px] [&>*]:max-w-[500px] gap-6 mb-8' ref={formRef}>
           <div>
             <Input
-              id='title'
+              id='courseName'
               type='text'
-              name='title'
-              key='inside-title'
+              name='courseName'
+              key='inside-courseName'
               labelPlacement='inside'
               label='Titulo'
               variant='bordered'
               isClearable
-              onClear={() => { clearInput('title') }}
+              onClear={() => { clearInput('courseName') }}
               className='w-full'
               size='lg'
-              value={fields.title}
+              value={fields.courseName}
               onChange={changeFields}
             />
           </div>
@@ -117,17 +118,21 @@ export const CourseForm = ({ onClose, onSuccess, formRef, isUpdatable = false, i
           onPress={() => {
             clearAll(initForm)
             onClose()
-          }}>
+          }}
+          isDisabled={loading}
+        >
           Cancelar
         </Button>
         <Button
           color='primary'
-          onPress={() => {
-            onSuccess()
+          onPress={async () => {
+            setLoading(true)
+            await onSuccess()
+            setLoading(false)
             clearAll(initForm)
             onClose()
           }}
-          isDisabled={allIsEmpty || isInvalidAll || (isUpdatable && fields.fileSyllabus.error != null)}
+          isDisabled={loading || allIsEmpty || isInvalidAll || (isUpdatable && fields.fileSyllabus.error != null)}
         >
           Guardar
         </Button>

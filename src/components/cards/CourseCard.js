@@ -10,15 +10,17 @@ import { DropDown } from '../dropdown/DropDown'
 import { useMemo, useRef } from 'react'
 import { FormModal } from '../modals/FormModal'
 import { CourseForm } from '../forms/CourseForm'
+import { useAdminContext } from '@/hooks/useAdminContext'
 
 export const CourseCard = ({ id, title, description, syllabus, contents, credits }) => {
+  const { setStoreCourses, courses } = useAdminContext()
   const { data } = useSession()
   const formRef = useRef(null)
   const router = useRouter()
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const { isOpen: isOpenUpdate, onOpen: onOpenUpdate, onClose: onCloseUpdate, onOpenChange: onOpenChangeUpdate } = useDisclosure()
   const { isOpen: isOpenDelete, onOpen: onOpenDelete, onOpenChange: onOpenChangeDelete } = useDisclosure()
-  const bearer = 'Bearer ' + data.user.accessToken
+  const bearer = data.user.accessToken
   const courseActions = useMemo(() => {
     return [{
       label: 'Ver documento',
@@ -34,27 +36,34 @@ export const CourseCard = ({ id, title, description, syllabus, contents, credits
       onClick: onOpenDelete
     }]
   }, [])
+  console.log(courses)
 
   const handleUpdate = async () => {
     const form = new FormData(formRef.current)
+    form.set('token', bearer)
     form.set('url', syllabus)
 
     try {
-      const resp = await axiosClientSameServer.patch(`/course/${id}`, form, {
+      const { data } = await axiosClientSameServer.patch(`/course/${id}`, form, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       })
-      console.log(resp)
+
+      const lessThis = courses.data.filter(x => x.idCourse !== id)
+      setStoreCourses([...lessThis, data.data])
     } catch (er) {
       console.log(er)
     }
   }
 
   const handleDelete = async () => {
-    await axiosCLient.post('/admin/courses', null, {
-      headers: { Authorization: bearer }
+    await axiosCLient.delete('/admin/course/delete/' + id, {
+      headers: { Authorization: 'Bearer ' + bearer }
     })
+
+    const lessThis = courses.data.filter(x => x.idCourse !== id)
+    setStoreCourses(lessThis)
   }
 
   return (
@@ -111,7 +120,7 @@ export const CourseCard = ({ id, title, description, syllabus, contents, credits
         <CourseForm
           onClose={onCloseUpdate}
           initForm={{
-            title, description, contents, credits, fileSyllabus: { file: null, error: null }
+            courseName: title, description, contents, credits, fileSyllabus: { file: null, error: null }
           }}
           formRef={formRef}
           onSuccess={handleUpdate}

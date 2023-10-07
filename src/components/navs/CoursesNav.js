@@ -6,26 +6,31 @@ import { useAdminContext } from '@/hooks/useAdminContext'
 import { CourseForm } from '../forms/CourseForm'
 import { useRef } from 'react'
 import { axiosClientSameServer } from '@/lib/axios'
+import { useSession } from 'next-auth/react'
 
 export const CoursesNav = () => {
-  const { courses } = useAdminContext()
+  const { courses, setStoreCourses } = useAdminContext()
+  const { data } = useSession()
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
   const formRef = useRef(null)
 
-  const onUploadFile = async () => {
+  const onAddCourse = async () => {
     const form = new FormData(formRef.current)
+    form.append('token', data.user.accessToken)
 
     try {
-      const resp = await axiosClientSameServer.post('/course', form, {
+      const { data: courseNew } = await axiosClientSameServer.post('/course', form, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       })
-      console.log(resp)
+      console.log(courseNew.data)
+      setStoreCourses([...courses.data, courseNew.data])
     } catch (er) {
       console.log(er)
     }
   }
+
   return (
     <>
       <nav className='w-full flex items-center justify-between'>
@@ -66,7 +71,7 @@ export const CoursesNav = () => {
         <CourseForm
           onClose={onClose}
           formRef={formRef}
-          onSuccess={onUploadFile}
+          onSuccess={onAddCourse}
         />
       </FormModal>
     </>

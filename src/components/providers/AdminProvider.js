@@ -27,9 +27,12 @@ export const AdminProvider = ({ children }) => {
   const getContents = async (id) => {
     return await axiosCLient.get(`/admin/courses/contents/${id}`, { headers: { Authorization: bearer } })
   }
+  const setStoreCourses = (coursesToSet) => {
+    setCourses(prev => ({ ...prev, data: coursesToSet }))
+  }
 
   return (
-    <AdminContext.Provider value={{ courses, getContents, getCourses }}>
+    <AdminContext.Provider value={{ courses, getContents, getCourses, setStoreCourses }}>
       {children}
     </AdminContext.Provider>
   )
