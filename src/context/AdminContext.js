@@ -5,5 +5,6 @@ export const AdminContext = createContext({
   contents: null,
   getCourses: () => { },
   getContents: (idCourse) => { },
-  setStoreCourses: (courseToSet) => { }
+  setStoreCourses: (courseToSet) => { },
+  setStoreContents: (c) => { }
 })

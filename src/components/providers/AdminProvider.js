@@ -7,6 +7,7 @@ import { AdminContext } from '@/context/AdminContext'
 
 export const AdminProvider = ({ children }) => {
   const [courses, setCourses] = useState({ data: [], loading: false })
+  const [contents, setContents] = useState({ data: [], loading: false })
   const { data } = useSession()
 
   if (!data) {
@@ -25,14 +26,20 @@ export const AdminProvider = ({ children }) => {
   }
 
   const getContents = async (id) => {
-    return await axiosCLient.get(`/admin/courses/contents/${id}`, { headers: { Authorization: bearer } })
+    const { data } = await axiosCLient.get(`/user/course/contents/${id}`, { headers: { Authorization: bearer } })
+    setContents(prev => ({ ...prev, data: data.data, loading: false }))
   }
+
   const setStoreCourses = (coursesToSet) => {
     setCourses(prev => ({ ...prev, data: coursesToSet }))
   }
 
+  const setStoreContents = (contentToSet) => {
+    setContents(prev => ({ ...prev, data: contentToSet }))
+  }
+
   return (
-    <AdminContext.Provider value={{ courses, getContents, getCourses, setStoreCourses }}>
+    <AdminContext.Provider value={{ courses, contents, getContents, getCourses, setStoreCourses, setStoreContents }}>
       {children}
     </AdminContext.Provider>
   )

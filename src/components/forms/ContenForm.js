@@ -1,33 +1,31 @@
+'use client'
 import { useForm } from '@/hooks/useForm'
 import { validBetween, validtTextarea } from '@/lib/formValid'
-import { Button, Input, ModalBody, ModalFooter, Textarea } from '@nextui-org/react'
+import { ModalBody, Input, Textarea, Button, ModalFooter } from '@nextui-org/react'
 import { useMemo, useState } from 'react'
 
 const init = {
-  courseName: '',
-  credits: 2,
-  fileSyllabus: {
-    file: null,
-    error: null
-  },
-  description: ''
+  title: '',
+  description: '',
+  file: { file: null, error: null },
+  numOrder: 1
 }
 
-export const CourseForm = ({ onClose, onSuccess, formRef, isUpdatable = false, initForm = init }) => {
+export const ContentForm = ({ onSuccess, formRef, onClose, initForm = init, isUpdatable = false, idCourse }) => {
+  const { fields, clearAll, clearInput, changeFields } = useForm(initForm)
   const [loading, setLoading] = useState(false)
-  const { fields, changeFields, clearInput, clearAll } = useForm(initForm)
-  const isInvalidCredits = useMemo(() => {
-    return validBetween(fields.credits, 2, 4)
+
+  const isInvalidOrder = useMemo(() => {
+    return validBetween(fields.numOrder, 1, 16)
   }, [fields])
 
   const isInvalidTextarea = useMemo(() => {
-    return validtTextarea(fields.description, 300, 150)
+    return validtTextarea(fields.description, 300, 100)
   }, [fields])
 
-  const isFileValid = isUpdatable ? false : (fields.fileSyllabus.file == null)
-  const isInvalidAll = [isInvalidCredits, isInvalidTextarea, isFileValid].some(x => x)
+  const isFileValid = isUpdatable ? false : (fields.file.file == null)
+  const isInvalidAll = [isInvalidOrder, isInvalidTextarea, isFileValid].some(x => x)
   const allIsEmpty = !Object.values(fields).every(x => {
-    console.log({ x })
     if (x?.file) return x.file
     return x
   })
@@ -37,58 +35,67 @@ export const CourseForm = ({ onClose, onSuccess, formRef, isUpdatable = false, i
       <ModalBody>
         <form className='flex flex-col w-[500px] [&>*]:max-w-[500px] gap-6 mb-8' ref={formRef}>
           <div>
+            <input
+              type='hidden'
+              hidden
+              name='idCourse'
+              value={idCourse}
+            />
             <Input
-              id='courseName'
+              id='title'
               type='text'
-              name='courseName'
-              key='inside-courseName'
+              name='title'
+              key='inside-title'
               labelPlacement='inside'
               label='Titulo'
               variant='bordered'
               isClearable
-              onClear={() => { clearInput('courseName') }}
               className='w-full'
               size='lg'
-              value={fields.courseName}
+              onClear={() => { clearInput('title') }}
+              value={fields.title}
               onChange={changeFields}
             />
           </div>
 
           <div>
             <Input
-              id='credits'
+              id='numOrder'
               type='number'
-              name='credits'
-              min={2}
-              max={4}
-              key='inside-credits'
+              name='numOrder'
+              min={1}
+              max={16}
+              key='inside-order'
               labelPlacement='inside'
-              label='Creditos'
+              label='Orden'
               variant='bordered'
-              errorMessage={isInvalidCredits && 'Los valores deber estar entre 2 y 4'}
-              isInvalid={isInvalidCredits}
               isClearable
-              onClear={() => { clearInput('credits') }}
               className='w-full'
               size='lg'
-              value={fields.credits}
+              errorMessage={isInvalidOrder && 'Los valores deber estar entre 1 y 16'}
+              isInvalid={isInvalidOrder}
+              onClear={() => { clearInput('numOrder') }}
+              value={fields.numOrder}
               onChange={changeFields}
             />
           </div>
 
           <div>
             <Input
-              id='fileSyllabus'
-              name='syllabus'
+              id='file'
+              name='linkFile'
               type='file'
-              key='inside-syllabus'
+              key='inside-file'
               variant='bordered'
-              errorMessage={fields.fileSyllabus.error || ''}
-              isInvalid={fields.fileSyllabus.error != null}
+              // accept='application/vnd.ms-powerpoint,
+              //          application/vnd.openxmlformats-officedocument.presentationml.slideshow,
+              //          application/vnd.openxmlformats-officedocument.presentationml.presentation'
               accept='application/pdf'
               className='w-full'
               size='lg'
               onChange={changeFields}
+              errorMessage={fields.file.error || ''}
+              isInvalid={fields.file.error != null}
             />
           </div>
 
@@ -102,12 +109,12 @@ export const CourseForm = ({ onClose, onSuccess, formRef, isUpdatable = false, i
               label='Descipción'
               variant='bordered'
               minLength={150}
-              errorMessage={isInvalidTextarea && 'El campo debe tener al menos 150 caracteres'}
-              isInvalid={isInvalidTextarea}
               isClearable
-              onClear={() => { clearInput('description') }}
               className='w-full'
               size='lg'
+              isInvalid={isInvalidTextarea}
+              errorMessage={isInvalidTextarea && 'El campo debe tener al menos 100 caracteres'}
+              onClear={() => { clearInput('description') }}
               value={fields.description}
               onChange={changeFields}
             />
@@ -133,7 +140,7 @@ export const CourseForm = ({ onClose, onSuccess, formRef, isUpdatable = false, i
             clearAll(initForm)
             onClose()
           }}
-          isDisabled={loading || allIsEmpty || isInvalidAll || (isUpdatable && fields.fileSyllabus.error != null)}
+          isDisabled={loading || allIsEmpty || isInvalidAll || (isUpdatable && fields.file.error != null)}
         >
           Guardar
         </Button>

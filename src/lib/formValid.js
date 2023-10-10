@@ -41,9 +41,9 @@ export const deleteChars = cadena => {
   return cadena.replace(/[áéíóúÁÉÍÓÚ]/g, l => tildes[l] || l)
 }
 
-export const validCredits = credits => {
+export const validBetween = (credits, min, max) => {
   if (credits === '') return false
-  return !(credits >= 2 && credits <= 4)
+  return !(credits >= min && credits <= max)
 }
 
 export const validtTextarea = (text, max, min) => {

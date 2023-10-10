@@ -15,9 +15,9 @@ export const deleteResourcePromise = (id) => {
   })
 }
 
-export const uploadToPromise = (buffer) => {
+export const uploadToPromise = (buffer, resource = 'auto', folder = 'syllabus') => {
   return new Promise((resolve, reject) => {
-    cloudinary.uploader.upload_stream({ folder: 'syllabus' }, (err, result) => {
+    cloudinary.uploader.upload_stream({ folder, resource_type: resource }, (err, result) => {
       if (err) reject(err)
       resolve(result)
     }).end(buffer)

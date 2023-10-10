@@ -11,9 +11,10 @@ export const useForm = (obj) => {
         setFields(prev => ({ ...prev, [e.target.id]: { file: null, error: 'Archivo no deber ser vacios' } }))
         return
       }
-
-      if (file.type !== 'application/pdf') {
-        setFields(prev => ({ ...prev, [e.target.id]: { file: null, error: 'Archivo debe ser pdf' } }))
+      console.log(file.accept)
+      if (!e.target.accept.includes(file.type)) {
+        console.log(e.target.accept.includes(file.type))
+        setFields(prev => ({ ...prev, [e.target.id]: { file: null, error: 'Archivo incorrecto' } }))
         return
       }
 
