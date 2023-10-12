@@ -1,6 +1,7 @@
 const rgxEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i
 const rgxNames = /^[a-zA-Z]+\s[a-zA-Z]+$/
 const rgxDni = /^[0-9]+$/
+const rgxURL = /^https:\/\/[^\s/$.?#].[^\s]*$/
 
 export const validEmail = (email) => {
   if (email === '') return false
@@ -49,4 +50,9 @@ export const validBetween = (credits, min, max) => {
 export const validtTextarea = (text, max, min) => {
   if (text === '') return false
   return (text.length < min || text.length > max)
+}
+
+export const validUrl = (url) => {
+  if (url === '') return false
+  return !rgxURL.test(url)
 }

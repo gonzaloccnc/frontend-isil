@@ -1,16 +1,13 @@
 'use client'
-import { useAdminContext } from '@/hooks/useAdminContext'
 import { Pagination } from '@nextui-org/react'
 
-export const PaginationWrap = ({ total, initialPage }) => {
-  const { getCourses } = useAdminContext()
-
+export const PaginationWrap = ({ total, initialPage, changePage }) => {
   return (
     <Pagination
       total={total}
       initialPage={initialPage}
       color='primary'
-      onChange={(page) => getCourses(page - 1)}
+      onChange={changePage}
       classNames={{ item: 'bg-dark-secondary hover:bg-primary' }}
     />
   )

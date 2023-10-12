@@ -1,31 +1,37 @@
 'use client'
-import { Button, Divider, useDisclosure, Dropdown, DropdownTrigger, DropdownItem, DropdownMenu } from '@nextui-org/react'
-import { FormModal } from '../modals/FormModal'
-import { PaginationWrap } from '../pagination/PaginationWrap'
+import { PaginationWrap } from '@/components/pagination/PaginationWrap'
 import { useAdminContext } from '@/hooks/useAdminContext'
-import { CourseForm } from '../forms/CourseForm'
-import { useRef } from 'react'
-import { axiosClientSameServer } from '@/lib/axios'
+import { Button, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, useDisclosure } from '@nextui-org/react'
 import { useSession } from 'next-auth/react'
+import { useRef } from 'react'
+import { FormModal } from '../modals/FormModal'
+import { axiosCLient } from '@/lib/axios'
+import { ClassForm } from '../forms/ClassForm'
 
-export const CoursesNav = () => {
-  const { courses, getCourses, setStoreCourses } = useAdminContext()
+export const ClassNav = () => {
+  const { classes, getClasses, setStoreClasses } = useAdminContext()
   const { data } = useSession()
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
   const formRef = useRef(null)
+  const token = data.user.accessToken
 
-  const onAddCourse = async () => {
+  const onAddClass = async () => {
     const form = new FormData(formRef.current)
-    form.append('token', data.user.accessToken)
+    const classEntity = {}
+    form.forEach((x, y) => {
+      if (y === 'idClassroom') return
+      classEntity[y] = x
+    })
 
     try {
-      const { data: courseNew } = await axiosClientSameServer.post('/course', form, {
+      const { data: classNew } = await axiosCLient.post('/admin/classes', classEntity, {
         headers: {
-          'Content-Type': 'multipart/form-data'
+          Authorization: 'Bearer ' + token
         }
       })
-      console.log(courseNew.data)
-      setStoreCourses([...courses.data, courseNew.data])
+      console.log(classNew)
+
+      setStoreClasses([classNew.data, ...classes.data])
     } catch (er) {
       console.log(er)
     }
@@ -52,9 +58,9 @@ export const CoursesNav = () => {
           <Divider orientation='vertical' className='h-5' />
           <div>
             <PaginationWrap
-              total={courses?.totalPages ?? 1}
+              total={classes?.totalPages ?? 1}
               initialPage={1}
-              changePage={(page) => getCourses(page - 1)}
+              changePage={(page) => getClasses(page - 1)}
             />
           </div>
         </div>
@@ -63,19 +69,22 @@ export const CoursesNav = () => {
             color='primary'
             onPress={onOpen}
           >
-            Agregar curso
+            Agregar clase
           </Button>
         </div>
-      </nav>
+      </nav >
       <FormModal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
-        title='Agregar curso'
+        title='Agregar clase'
+        scroll='inside'
+        size='3xl'
+        className=''
       >
-        <CourseForm
-          onClose={onClose}
+        <ClassForm
           formRef={formRef}
-          onSuccess={onAddCourse}
+          onClose={onClose}
+          onSuccess={onAddClass}
         />
       </FormModal>
     </>

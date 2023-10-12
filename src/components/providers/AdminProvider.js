@@ -8,6 +8,7 @@ import { AdminContext } from '@/context/AdminContext'
 export const AdminProvider = ({ children }) => {
   const [courses, setCourses] = useState({ data: [], loading: false })
   const [contents, setContents] = useState({ data: [], loading: false })
+  const [classes, setClasses] = useState({ data: [], loading: false })
   const { data } = useSession()
 
   if (!data) {
@@ -38,8 +39,17 @@ export const AdminProvider = ({ children }) => {
     setContents(prev => ({ ...prev, data: contentToSet }))
   }
 
+  const getClasses = async (page = 0) => {
+    const { data } = await axiosCLient.get(`/user/classes?page=${page}`, { headers: { Authorization: bearer } })
+    setClasses(prev => ({ ...data, loading: false }))
+  }
+
+  const setStoreClasses = (classesToSet) => {
+    setClasses(prev => ({ ...prev, data: classesToSet }))
+  }
+
   return (
-    <AdminContext.Provider value={{ courses, contents, getContents, getCourses, setStoreCourses, setStoreContents }}>
+    <AdminContext.Provider value={{ courses, classes, contents, getContents, getCourses, getClasses, setStoreCourses, setStoreContents, setStoreClasses }}>
       {children}
     </AdminContext.Provider>
   )

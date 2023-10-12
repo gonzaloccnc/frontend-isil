@@ -4,7 +4,7 @@ export const useForm = (obj) => {
   const [fields, setFields] = useState(obj)
 
   const changeFields = (e) => {
-    if (e.target.id.startsWith('file')) {
+    if (e.target.id?.startsWith('file')) {
       const file = e.target.files[0]
 
       if (e.target.files.length === 0) {
@@ -24,6 +24,10 @@ export const useForm = (obj) => {
     setFields(prev => ({ ...prev, [e.target.id]: e.target.value }))
   }
 
+  const changeSelect = (e) => {
+    setFields(prev => ({ ...prev, [e.target.name]: e.target.value }))
+  }
+
   const changeCheckBox = e => {
     setFields(prev => ({ ...prev, checked: e }))
   }
@@ -40,6 +44,7 @@ export const useForm = (obj) => {
     fields,
     changeFields,
     changeCheckBox,
+    changeSelect,
     clearInput,
     clearAll
   }

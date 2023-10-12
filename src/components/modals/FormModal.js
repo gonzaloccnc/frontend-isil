@@ -1,7 +1,7 @@
 'use client'
 import { Modal, ModalContent, ModalHeader } from '@nextui-org/react'
 
-export const FormModal = ({ children, isOpen, onOpenChange, title }) => {
+export const FormModal = ({ children, isOpen, onOpenChange, title, scroll = 'normal', className = 'grid place-content-center', size = 'xl' }) => {
   return (
     <Modal
       isOpen={isOpen}
@@ -10,8 +10,9 @@ export const FormModal = ({ children, isOpen, onOpenChange, title }) => {
       isKeyboardDismissDisabled={true}
       isDismissable={false}
       hideCloseButton={true}
-      size='xl'
-      className='grid place-content-center'
+      size={size}
+      className={className}
+      scrollBehavior={scroll}
     >
       <ModalContent>
         {(onClose) => (

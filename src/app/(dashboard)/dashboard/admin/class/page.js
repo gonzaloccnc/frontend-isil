@@ -1,7 +1,12 @@
+import { ClassNav } from '@/components/navs/ClassNav'
+import { ContentClass } from './ContentClass'
 
 const ClassPage = async () => {
   return (
-    <div>page</div>
+    <>
+      <ClassNav />
+      <ContentClass />
+    </>
   )
 }
 

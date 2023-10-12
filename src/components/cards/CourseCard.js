@@ -36,7 +36,6 @@ export const CourseCard = ({ id, title, description, syllabus, contents, credits
       onClick: onOpenDelete
     }]
   }, [])
-  console.log(courses)
 
   const handleUpdate = async () => {
     const form = new FormData(formRef.current)
