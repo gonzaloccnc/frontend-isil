@@ -1,7 +1,7 @@
 'use client'
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from '@nextui-org/react'
 
-export const DropDown = ({ items }) => {
+export const DropDown = ({ items, title = 'Acciones' }) => {
   return (
     <Dropdown>
       <DropdownTrigger>
@@ -10,7 +10,7 @@ export const DropDown = ({ items }) => {
           color='primary'
           className='text-white'
         >
-          Acciones
+          {title}
         </Button>
       </DropdownTrigger>
       <DropdownMenu aria-label='Acciones'>

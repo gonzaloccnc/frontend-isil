@@ -1,5 +1,5 @@
 import { axiosServer } from '@/lib/axios'
-import { uploadToPromise } from '@/lib/uploadFileCLoud'
+import { uploadToPromise } from '@/lib/cloudinaryUtils'
 import { NextResponse } from 'next/server'
 
 export const POST = async (req) => {
@@ -16,7 +16,6 @@ export const POST = async (req) => {
     description: '',
     idCourse: ''
   }
-  console.log(image)
 
   data.forEach((x, y) => {
     if (y === 'token' || y === 'linkFile') return
@@ -27,7 +26,6 @@ export const POST = async (req) => {
     const result = await uploadToPromise(buffer, 'auto', 'contents')
     contentMap.linkFile = result.url
 
-    console.log(contentMap)
     const { data: content } = await axiosServer.post('/admin/course/content/Create', JSON.stringify(contentMap), {
       headers: {
         'Content-type': 'application/json',
@@ -37,7 +35,6 @@ export const POST = async (req) => {
 
     return NextResponse.json({ ok: true, data: content })
   } catch (ex) {
-    console.log(ex.response)
     return NextResponse.json({ ok: false, message: ex.message })
   }
 }

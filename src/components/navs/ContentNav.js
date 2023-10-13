@@ -8,7 +8,7 @@ import { useSession } from 'next-auth/react'
 import { axiosClientSameServer } from '@/lib/axios'
 import { useAdminContext } from '@/hooks/useAdminContext'
 
-export const ContentNav = ({ id }) => {
+export const ContentNav = ({ id, course }) => {
   const { isOpen, onOpenChange, onClose, onOpen } = useDisclosure()
   const { data } = useSession()
   const { contents, setStoreContents } = useAdminContext()
@@ -27,7 +27,6 @@ export const ContentNav = ({ id }) => {
 
       setStoreContents([...contents.data, contentNew.data])
     } catch (er) {
-      console.log(er)
     }
   }
 
@@ -35,7 +34,7 @@ export const ContentNav = ({ id }) => {
     <>
       <header className='flex items-center justify-between mb-5'>
         <nav className='flex items-center gap-2'>
-          <Link href='/dashboard/admin/courses'>Regresar</Link>
+          <Link href='/dashboard/admin/courses'>Cursos {'>'} {course.courseName} </Link>
         </nav>
         <Button
           onPress={onOpen}

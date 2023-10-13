@@ -6,17 +6,15 @@ import { useAdminContext } from '@/hooks/useAdminContext'
 import { CourseForm } from '../forms/CourseForm'
 import { useRef } from 'react'
 import { axiosClientSameServer } from '@/lib/axios'
-import { useSession } from 'next-auth/react'
 
-export const CoursesNav = () => {
+export const CoursesNav = ({ pageable, token }) => {
   const { courses, getCourses, setStoreCourses } = useAdminContext()
-  const { data } = useSession()
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
   const formRef = useRef(null)
 
   const onAddCourse = async () => {
     const form = new FormData(formRef.current)
-    form.append('token', data.user.accessToken)
+    form.append('token', token)
 
     try {
       const { data: courseNew } = await axiosClientSameServer.post('/course', form, {
@@ -24,10 +22,8 @@ export const CoursesNav = () => {
           'Content-Type': 'multipart/form-data'
         }
       })
-      console.log(courseNew.data)
       setStoreCourses([...courses.data, courseNew.data])
     } catch (er) {
-      console.log(er)
     }
   }
 
@@ -44,15 +40,15 @@ export const CoursesNav = () => {
               </Button>
             </DropdownTrigger>
             <DropdownMenu aria-label='Static Actions'>
-              <DropdownItem key='new'>Fecha</DropdownItem>
-              <DropdownItem key='copy'>Nombre A-Z</DropdownItem>
-              <DropdownItem key='copy'>Nombre Z-A</DropdownItem>
+              <DropdownItem key='fecha'>Fecha</DropdownItem>
+              <DropdownItem key='ordena'>Nombre A-Z</DropdownItem>
+              <DropdownItem key='ordenz'>Nombre Z-A</DropdownItem>
             </DropdownMenu>
           </Dropdown>
           <Divider orientation='vertical' className='h-5' />
           <div>
             <PaginationWrap
-              total={courses?.totalPages ?? 1}
+              total={pageable.totalPages}
               initialPage={1}
               changePage={(page) => getCourses(page - 1)}
             />

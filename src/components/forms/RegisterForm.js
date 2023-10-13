@@ -1,7 +1,7 @@
 'use client'
 
 import { useForm } from '@/hooks/useForm'
-import { axiosCLient } from '@/lib/axios'
+import { axiosClient } from '@/lib/axios'
 import { validDNI, validEmail, validNames, validPassword } from '@/lib/formValid'
 import { Button, Input } from '@nextui-org/react'
 import { signIn } from 'next-auth/react'
@@ -56,7 +56,7 @@ export const RegisterForm = () => {
       }, '').trim()
       const { password, dni: docId } = fields
 
-      await axiosCLient.post('/auth/register', { email, firstname, surnames, password, docId, typeDoc: 0 })
+      await axiosClient.post('/auth/register', { email, firstname, surnames, password, docId, typeDoc: 0 })
       const res = await signIn('credentials', {
         email, password, redirect: false, callbackUrl: '/dashboard'
       })

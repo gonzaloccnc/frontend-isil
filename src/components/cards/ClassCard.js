@@ -1,10 +1,9 @@
 'use client'
-import { Button, Card, CardBody, CardFooter, CardHeader, Chip, Tooltip, useDisclosure } from '@nextui-org/react'
+import { Button, Card, CardBody, CardFooter, CardHeader, Chip, useDisclosure } from '@nextui-org/react'
 import { useRef } from 'react'
-import { useSession } from 'next-auth/react'
 import { useAdminContext } from '@/hooks/useAdminContext'
 import { FormModal } from '../modals/FormModal'
-import { axiosCLient } from '@/lib/axios'
+import { axiosClient } from '@/lib/axios'
 import { ClassForm } from '../forms/ClassForm'
 import { IconGroup } from '../icons/IconGroup'
 import { IconClock } from '../icons/IconClock'
@@ -28,12 +27,11 @@ const modalities = [{
   value: 4
 }]
 
-export const ClassCard = ({ title, schoolDay, linkMeet, startDate, endDate, idTeacher, idCourse, maxMembers, nrc, startTime, endTime, modality, day, meet, totalHours, campus, period, teacher, max, idClass }) => {
+export const ClassCard = ({ token, title, schoolDay, linkMeet, startDate, endDate, idTeacher, idCourse, maxMembers, nrc, startTime, endTime, modality, day, meet, totalHours, campus, period, teacher, max, idClass }) => {
   const { setStoreClasses, classes } = useAdminContext()
-  const { data } = useSession()
   const formRef = useRef(null)
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
-  const bearer = data.user.accessToken
+  const bearer = token
   const modalityTo = modalities.find(x => x.text === modality) ?? { value: 1 }
 
   const handleUpdate = async () => {
@@ -45,7 +43,7 @@ export const ClassCard = ({ title, schoolDay, linkMeet, startDate, endDate, idTe
     })
 
     try {
-      const { data: classUpdate } = await axiosCLient.patch(`/admin/classes/${idClass}`, classEntity, {
+      const { data: classUpdate } = await axiosClient.patch(`/admin/classes/${idClass}`, classEntity, {
         headers: {
           Authorization: 'Bearer ' + bearer
         }
@@ -54,7 +52,6 @@ export const ClassCard = ({ title, schoolDay, linkMeet, startDate, endDate, idTe
       const lessThis = classes.data.filter(x => x.idClassroom !== idClass)
       setStoreClasses([classUpdate.data, ...lessThis])
     } catch (er) {
-      console.log(er)
     }
   }
 
@@ -62,20 +59,11 @@ export const ClassCard = ({ title, schoolDay, linkMeet, startDate, endDate, idTe
     <>
       <Card className='py-4 bg-dark-secondary'>
         <CardHeader className='pb-0 pt-2 px-4 flex-col items-start gap-2'>
-          <Tooltip
-            content='Ir al curso'
-            key='right-end-ver'
-            placement='right-end'
-            offset={6}
-            color='primary'
-
+          <p
+            className='text-tiny uppercase font-bold flex items-center gap-2 cursor-pointer text-primary-500'
           >
-            <p
-              className='text-tiny uppercase font-bold flex items-center gap-2 cursor-pointer text-primary-500'
-            >
-              {title}
-            </p>
-          </Tooltip>
+            {title}
+          </p>
         </CardHeader>
         <CardBody className='overflow-visible py-2'>
           <div className='flex items-center flex-wrap gap-2'>

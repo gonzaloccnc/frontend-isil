@@ -27,7 +27,6 @@ export const CourseForm = ({ onClose, onSuccess, formRef, isUpdatable = false, i
   const isFileValid = isUpdatable ? false : (fields.fileSyllabus.file == null)
   const isInvalidAll = [isInvalidCredits, isInvalidTextarea, isFileValid].some(x => x)
   const allIsEmpty = !Object.values(fields).every(x => {
-    console.log({ x })
     if (x?.file) return x.file
     return x
   })

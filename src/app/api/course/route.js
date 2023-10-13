@@ -1,5 +1,5 @@
 import { axiosServer } from '@/lib/axios'
-import { uploadToPromise } from '@/lib/uploadFileCLoud'
+import { uploadToPromise } from '@/lib/cloudinaryUtils'
 
 import { NextResponse } from 'next/server'
 
@@ -25,7 +25,7 @@ export async function POST(req) {
   try {
     const result = await uploadToPromise(buffer)
     courseMap.syllabus = result.url
-    console.log(JSON.stringify(courseMap))
+
     const { data: course } = await axiosServer.post('/admin/course/create', JSON.stringify(courseMap), {
       headers: {
         'Content-type': 'application/json',
@@ -33,11 +33,8 @@ export async function POST(req) {
       }
     })
 
-    console.log({ course })
-
     return NextResponse.json({ ok: true, data: course })
   } catch (ex) {
-    console.log(ex.response)
     return NextResponse.json({ ok: false, message: ex.message })
   }
 }

@@ -3,7 +3,7 @@ import { ClassCard } from '@/components/cards/ClassCard'
 import { useAdminContext } from '@/hooks/useAdminContext'
 import { useEffect } from 'react'
 
-export const ContentClass = () => {
+export const ContentClass = ({ token }) => {
   const { classes, getClasses } = useAdminContext()
 
   if (classes.loading) {
@@ -20,6 +20,7 @@ export const ContentClass = () => {
         classes?.data.map(x => (
           <ClassCard
             key={x.idClassroom}
+            token={token}
             id={x.idClassroom}
             title={x.course + ' - ' + x.nrc}
             campus={x.campus}

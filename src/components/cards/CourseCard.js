@@ -4,7 +4,7 @@ import { IcoArrowRight } from '../icons/IcoArrowRight'
 import { useRouter } from 'next/navigation'
 import { PdfModal } from '../modals/PdfModal'
 import { WarningModal } from '../modals/WarningModal'
-import { axiosCLient, axiosClientSameServer } from '@/lib/axios'
+import { axiosClient, axiosClientSameServer } from '@/lib/axios'
 import { useSession } from 'next-auth/react'
 import { DropDown } from '../dropdown/DropDown'
 import { useMemo, useRef } from 'react'
@@ -20,7 +20,7 @@ export const CourseCard = ({ id, title, description, syllabus, contents, credits
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const { isOpen: isOpenUpdate, onOpen: onOpenUpdate, onClose: onCloseUpdate, onOpenChange: onOpenChangeUpdate } = useDisclosure()
   const { isOpen: isOpenDelete, onOpen: onOpenDelete, onOpenChange: onOpenChangeDelete } = useDisclosure()
-  const bearer = data.user.accessToken
+  const bearer = data?.user.accessToken
   const courseActions = useMemo(() => {
     return [{
       label: 'Ver documento',
@@ -52,12 +52,11 @@ export const CourseCard = ({ id, title, description, syllabus, contents, credits
       const lessThis = courses.data.filter(x => x.idCourse !== id)
       setStoreCourses([...lessThis, data.data])
     } catch (er) {
-      console.log(er)
     }
   }
 
   const handleDelete = async () => {
-    await axiosCLient.delete('/admin/course/delete/' + id, {
+    await axiosClient.delete('/admin/course/delete/' + id, {
       headers: { Authorization: 'Bearer ' + bearer }
     })
 

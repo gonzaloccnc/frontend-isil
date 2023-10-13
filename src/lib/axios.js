@@ -5,7 +5,7 @@ export const axiosServer = axios.create({
   headers: { 'Content-Type': 'application/json' }
 })
 
-export const axiosCLient = axios.create({
+export const axiosClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: { 'Content-Type': 'application/json' }
 })

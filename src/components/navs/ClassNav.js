@@ -2,18 +2,15 @@
 import { PaginationWrap } from '@/components/pagination/PaginationWrap'
 import { useAdminContext } from '@/hooks/useAdminContext'
 import { Button, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, useDisclosure } from '@nextui-org/react'
-import { useSession } from 'next-auth/react'
 import { useRef } from 'react'
 import { FormModal } from '../modals/FormModal'
-import { axiosCLient } from '@/lib/axios'
+import { axiosClient } from '@/lib/axios'
 import { ClassForm } from '../forms/ClassForm'
 
-export const ClassNav = () => {
+export const ClassNav = ({ token }) => {
   const { classes, getClasses, setStoreClasses } = useAdminContext()
-  const { data } = useSession()
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
   const formRef = useRef(null)
-  const token = data.user.accessToken
 
   const onAddClass = async () => {
     const form = new FormData(formRef.current)
@@ -24,16 +21,14 @@ export const ClassNav = () => {
     })
 
     try {
-      const { data: classNew } = await axiosCLient.post('/admin/classes', classEntity, {
+      const { data: classNew } = await axiosClient.post('/admin/classes', classEntity, {
         headers: {
           Authorization: 'Bearer ' + token
         }
       })
-      console.log(classNew)
 
       setStoreClasses([classNew.data, ...classes.data])
     } catch (er) {
-      console.log(er)
     }
   }
 

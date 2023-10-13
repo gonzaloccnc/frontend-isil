@@ -1,6 +1,4 @@
-
 'use client'
-
 import { IconCalendar } from '@/components/icons/IconCalendar'
 import { IconChats } from '@/components/icons/IconChats'
 import { IconClass } from '@/components/icons/IconClass'
@@ -28,18 +26,22 @@ export const UserNav = ({ role }) => {
         </Link>
       </Tooltip>
 
-      <Tooltip
-        content='Cursos'
-        key='right-end-cursos'
-        placement='right-end' offset={6}
-        showArrow
-        classNames={{ base: 'bg-primary', arrow: 'bg-primary mt-1' }}
-      >
-        <Link href='/dashboard/courses'
-          className='w-full h-[50px] grid place-content-center relative rounded-md text-white hover:bg-primary hover:text-black'>
-          <IconCourse />
-        </Link>
-      </Tooltip>
+      {
+        role === 'PROFESOR'
+          ? null
+          : <Tooltip
+            content='Cursos'
+            key='right-end-cursos'
+            placement='right-end' offset={6}
+            showArrow
+            classNames={{ base: 'bg-primary', arrow: 'bg-primary mt-1' }}
+          >
+            <Link href='/dashboard/courses'
+                  className='w-full h-[50px] grid place-content-center relative rounded-md text-white hover:bg-primary hover:text-black'>
+              <IconCourse />
+            </Link>
+          </Tooltip>
+      }
 
       <Tooltip
         content='Clases'
@@ -48,24 +50,28 @@ export const UserNav = ({ role }) => {
         showArrow
         classNames={{ base: 'bg-primary', arrow: 'bg-primary mt-1' }}
       >
-        <Link href='/dashboard/class'
+        <Link href='/dashboard/classes'
           className='w-full h-[50px] grid place-content-center relative rounded-md text-white hover:bg-primary hover:text-black'>
           <IconClass />
         </Link>
       </Tooltip>
 
-      <Tooltip
-        content='Grupos'
-        key='right-end-grupos'
-        placement='right-end' offset={6}
-        showArrow
-        classNames={{ base: 'bg-primary', arrow: 'bg-primary mt-1' }}
-      >
-        <Link href='/dashboard/groups' data-tooltip='Grupos'
-          className='w-full h-[50px] grid place-content-center relative rounded-md text-white hover:bg-primary hover:text-black'>
-          <IconGroups />
-        </Link>
-      </Tooltip>
+      {
+        role === 'PROFESOR'
+          ? null
+          : <Tooltip
+            content='Grupos'
+            key='right-end-grupos'
+            placement='right-end' offset={6}
+            showArrow
+            classNames={{ base: 'bg-primary', arrow: 'bg-primary mt-1' }}
+          >
+            <Link href='/dashboard/groups' data-tooltip='Grupos'
+                  className='w-full h-[50px] grid place-content-center relative rounded-md text-white hover:bg-primary hover:text-black'>
+              <IconGroups />
+            </Link>
+          </Tooltip>
+      }
 
       <Tooltip
         content='Calendario'

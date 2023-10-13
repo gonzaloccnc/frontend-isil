@@ -56,3 +56,8 @@ export const validUrl = (url) => {
   if (url === '') return false
   return !rgxURL.test(url)
 }
+
+export const validPhone = (phone) => {
+  if (phone === '') return false
+  return !(phone.length === 9)
+}

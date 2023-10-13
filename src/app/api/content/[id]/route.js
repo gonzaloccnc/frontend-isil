@@ -1,5 +1,5 @@
 import { axiosServer } from '@/lib/axios'
-import { uploadToPromise } from '@/lib/uploadFileCLoud'
+import { uploadToPromise } from '@/lib/cloudinaryUtils'
 import { NextResponse } from 'next/server'
 
 export const PATCH = async (req, { params }) => {
@@ -14,7 +14,6 @@ export const PATCH = async (req, { params }) => {
     description: '',
     idCourse: data.get('idCourse')
   }
-  console.log(image)
 
   data.forEach((x, y) => {
     if (y === 'token' || y === 'linkFile') return
@@ -25,7 +24,6 @@ export const PATCH = async (req, { params }) => {
 
   if (image.size !== 0) {
     // subir y elimar la iamgen anterior
-    console.log('hay imagen')
     const bytes = await image.arrayBuffer()
     const buffer = Buffer.from(bytes)
 
@@ -33,14 +31,11 @@ export const PATCH = async (req, { params }) => {
       // await deleteResourcePromise(idPrevImage)
       const result = await uploadToPromise(buffer, 'auto', 'contents')
       contentMap.linkFile = result.url
-      console.log(result.url)
     } catch (ex) {
-      console.log(ex.message)
       NextResponse.json({ ok: false, data: null })
     }
   }
 
-  console.log({ contentMap })
   try {
     const { data } = await axiosServer.put(`/admin/course/content/update/${params.id}`, contentMap, {
       headers: {
@@ -49,7 +44,6 @@ export const PATCH = async (req, { params }) => {
     })
     return NextResponse.json({ ok: true, data })
   } catch (ex) {
-    console.log(ex.response)
     NextResponse.json({ ok: false, data: null })
   }
 }

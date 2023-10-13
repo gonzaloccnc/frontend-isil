@@ -1,3 +1,4 @@
+'use client'
 import { IconClass } from '@/components/icons/IconClass'
 import { IconCourse } from '@/components/icons/IconCourse'
 import { IconHome } from '@/components/icons/IconHome'

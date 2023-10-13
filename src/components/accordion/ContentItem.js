@@ -47,10 +47,8 @@ export const ContentItem = ({ id, idCourse, description, file, title, numOrder }
       })
 
       const lessThis = contents.data.filter(x => x.id_content !== id)
-      console.log(data)
       setStoreContents([...lessThis, data.data].sort((a, b) => a.id_content - b.id_content))
     } catch (er) {
-      console.log(er)
     }
   }
 
