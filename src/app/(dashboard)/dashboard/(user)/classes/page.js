@@ -1,27 +1,8 @@
+import { WrapClasses } from './WrapClasses'
 
-const ClassesPage = () => {
-  const clases = [{
-    title: 'Algoritmos',
-    teacher: 'El profe'
-  }, {
-    title: 'Marke',
-    teacher: 'La market'
-  }, {
-    title: 'ASDAS',
-    teacher: 'eL ASDAS'
-  }]
-
+const ClassesPage = async () => {
   return (
-    <section>
-      {
-        clases.map(x => (
-          <div key={x.title}>
-            <p>{x.title}</p>
-            <span>{x.teacher}</span>
-          </div>
-        ))
-      }
-    </section>
+    <WrapClasses />
   )
 }
 

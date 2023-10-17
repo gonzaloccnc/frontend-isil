@@ -3,6 +3,7 @@ import { cookies } from 'next/headers'
 import { Info } from './Info'
 import { Details } from './Details'
 import { verifyToken } from '@/lib/jwtUtils'
+import { ProfileProvider } from '@/components/providers/ProfileProvider'
 
 const Me = async ({ params: { id } }) => {
   const token = cookies().get('token')
@@ -17,23 +18,19 @@ const Me = async ({ params: { id } }) => {
   const isMyProfile = payload.id === data.data.idUser
 
   return (
-    <section className='flex gap-10'>
-      <div className='w-2/5 bg-dark-secondary rounded-xl flex flex-col items-center py-5 max-h-[340px]'>
-        <Info
-          image={data.data.photo}
-          email={data.data.email}
-          address={data.data.address}
-          fullname={data.data.firstname + ' ' + data.data.surnames}
-        />
-      </div>
-      <div className='w-3/5 bg-dark-secondary rounded-xl flex flex-col items-center pt-5'>
-        <Details
-          data={data.data}
-          IsMyProfile={isMyProfile}
-          token={token.value}
-        />
-      </div>
-    </section>
+    <ProfileProvider init={data.data}>
+      <section className='flex gap-10'>
+        <div className='w-2/5 bg-dark-secondary rounded-xl flex flex-col items-center py-5 max-h-[340px]'>
+          <Info />
+        </div>
+        <div className='w-3/5 bg-dark-secondary rounded-xl flex flex-col items-center pt-5'>
+          <Details
+            IsMyProfile={isMyProfile}
+            token={token.value}
+          />
+        </div>
+      </section>
+    </ProfileProvider>
   )
 }
 

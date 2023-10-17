@@ -1,14 +1,15 @@
 'use client'
 
 import { useForm } from '@/hooks/useForm'
-import { axiosClient } from '@/lib/axios'
+import { axiosClientSameServer } from '@/lib/axios'
 import { validEmail, validPhone } from '@/lib/formValid'
 import { Input, ModalBody, ModalFooter, Button } from '@nextui-org/react'
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 
-export const ProfileForm = ({ onClose, formRef, initForm, token }) => {
-  const { fields, clearAll, clearInput, changeFields } = useForm(initForm)
+export const ProfileForm = ({ onClose, initForm, token, setProfile }) => {
+  const { fields, clearAll, clearInput, changeFields } = useForm({ ...initForm, file: { file: null, error: null } })
   const [loading, setLoading] = useState(false)
+  const formRef = useRef(null)
 
   const isInvalidEmail = useMemo(() => {
     return validEmail(fields.email)
@@ -22,10 +23,24 @@ export const ProfileForm = ({ onClose, formRef, initForm, token }) => {
   const IsEmptyAll = !Object.values({ email: fields.email, address: fields.address }).every(x => x)
 
   const onSuccess = async () => {
-    const { data } = await axiosClient.post(`/user/me/${fields.idUser}`, fields, {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-    console.log(data)
+    const formData = new FormData(formRef.current)
+    formData.append('token', token)
+    formData.append('birthday', fields.birthday)
+    formData.append('docId', fields.docId)
+    formData.append('firstname', fields.firstname)
+    formData.append('surnames', fields.surnames)
+
+    try {
+      const { data } = await axiosClientSameServer.patch(`/profile/${fields.idUser}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      console.log(data)
+      setProfile(data.data)
+    } catch (ex) {
+      console.error(ex)
+    }
   }
 
   return (
@@ -36,6 +51,7 @@ export const ProfileForm = ({ onClose, formRef, initForm, token }) => {
             <Input
               id='email'
               type='email'
+              name='email'
               key='inside-email'
               labelPlacement='inside'
               label='Email'
@@ -54,6 +70,7 @@ export const ProfileForm = ({ onClose, formRef, initForm, token }) => {
           <div>
             <Input
               id='address'
+              name='address'
               type='text'
               key='inside-address'
               labelPlacement='inside'
@@ -73,6 +90,7 @@ export const ProfileForm = ({ onClose, formRef, initForm, token }) => {
           <div>
             <Input
               id='phone'
+              name='phone'
               type='number'
               key='inside-phone'
               labelPlacement='inside'
@@ -89,12 +107,28 @@ export const ProfileForm = ({ onClose, formRef, initForm, token }) => {
             />
           </div>
 
+          <div>
+            <Input
+              id='file'
+              name='file'
+              type='file'
+              key='inside-file'
+              variant='bordered'
+              accept='.jpg, .png, .jpeg'
+              className='w-full'
+              size='lg'
+              onChange={changeFields}
+              errorMessage={fields.file.error || ''}
+              isInvalid={fields.file.error != null}
+            />
+          </div>
+
         </form>
       </ModalBody>
       <ModalFooter>
         <Button color='danger' variant='light'
           onPress={() => {
-            clearAll(initForm)
+            clearAll({ ...initForm, file: { file: null, error: null } })
             onClose()
           }}
           isDisabled={loading}
@@ -108,7 +142,7 @@ export const ProfileForm = ({ onClose, formRef, initForm, token }) => {
             setLoading(true)
             await onSuccess()
             setLoading(false)
-            clearAll(initForm)
+            clearAll({ ...initForm, file: { file: null, error: null } })
             onClose()
           }}
           color='primary'
