@@ -24,6 +24,10 @@ export const AdminProvider = ({ children, token }) => {
     setCourses(prev => ({ ...prev, data: coursesToSet }))
   }
 
+  const setStoreCoursesInit = (init) => {
+    setCourses(init)
+  }
+
   const setStoreContents = (contentToSet) => {
     setContents(prev => ({ ...prev, data: contentToSet }))
   }
@@ -37,8 +41,12 @@ export const AdminProvider = ({ children, token }) => {
     setClasses(prev => ({ ...prev, data: classesToSet }))
   }
 
+  const setStoreClassesInit = (init) => {
+    setClasses(init)
+  }
+
   return (
-    <AdminContext.Provider value={{ courses, classes, contents, getContents, getCourses, getClasses, setStoreCourses, setStoreContents, setStoreClasses }}>
+    <AdminContext.Provider value={{ courses, classes, contents, getContents, getCourses, getClasses, setStoreCourses, setStoreContents, setStoreClasses, setStoreCoursesInit, setStoreClassesInit }}>
       {children}
     </AdminContext.Provider>
   )

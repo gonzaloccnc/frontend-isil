@@ -1,15 +1,18 @@
 'use client'
-import { Button, Divider, useDisclosure, Dropdown, DropdownTrigger, DropdownItem, DropdownMenu } from '@nextui-org/react'
+import { Button, Divider, useDisclosure } from '@nextui-org/react'
 import { FormModal } from '../modals/FormModal'
 import { PaginationWrap } from '../pagination/PaginationWrap'
 import { useAdminContext } from '@/hooks/useAdminContext'
 import { CourseForm } from '../forms/CourseForm'
-import { useRef } from 'react'
-import { axiosClientSameServer } from '@/lib/axios'
+import { useEffect, useRef, useState } from 'react'
+import { axiosClient, axiosClientSameServer } from '@/lib/axios'
+import debounce from 'just-debounce-it'
+import { SearchInput } from '../search/Search'
 
-export const CoursesNav = ({ pageable, token }) => {
-  const { courses, getCourses, setStoreCourses } = useAdminContext()
+export const CoursesNav = ({ token }) => {
+  const { courses, getCourses, setStoreCourses, setStoreCoursesInit } = useAdminContext()
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
+  const [courseName, setCourseName] = useState('')
   const formRef = useRef(null)
 
   const onAddCourse = async () => {
@@ -27,28 +30,41 @@ export const CoursesNav = ({ pageable, token }) => {
     }
   }
 
+  const getCoursesFilter = async () => {
+    const { data } = await axiosClient.get(`/admin/courses/name/${courseName}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    setStoreCoursesInit(data)
+  }
+
+  const searchCourse = (e) => {
+    const setting = debounce(() => {
+      setCourseName(e.target.value)
+    }, 1000)
+
+    setting()
+  }
+
+  useEffect(() => {
+    if (courseName === '') {
+      getCourses()
+      return
+    }
+
+    getCoursesFilter()
+  }, [courseName])
+
   return (
     <>
       <nav className='w-full flex items-center justify-between'>
         <div className='flex gap-3 items-center'>
-          <Dropdown classNames={{ base: 'bg-dark-third' }}>
-            <DropdownTrigger>
-              <Button
-                color='primary'
-              >
-                Ordenar
-              </Button>
-            </DropdownTrigger>
-            <DropdownMenu aria-label='Static Actions'>
-              <DropdownItem key='fecha'>Fecha</DropdownItem>
-              <DropdownItem key='ordena'>Nombre A-Z</DropdownItem>
-              <DropdownItem key='ordenz'>Nombre Z-A</DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
+          <SearchInput onInput={searchCourse} onClear={getCourses} />
           <Divider orientation='vertical' className='h-5' />
           <div>
             <PaginationWrap
-              total={pageable.totalPages}
+              total={courses.totalPages}
               initialPage={1}
               changePage={(page) => getCourses(page - 1)}
             />

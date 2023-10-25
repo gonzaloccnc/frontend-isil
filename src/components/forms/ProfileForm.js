@@ -36,7 +36,6 @@ export const ProfileForm = ({ onClose, initForm, token, setProfile }) => {
           'Content-Type': 'multipart/form-data'
         }
       })
-      console.log(data)
       setProfile(data.data)
     } catch (ex) {
       console.error(ex)
@@ -114,7 +113,7 @@ export const ProfileForm = ({ onClose, initForm, token, setProfile }) => {
               type='file'
               key='inside-file'
               variant='bordered'
-              accept='.jpg, .png, .jpeg'
+              accept='image/jpg, image/png, image/jpeg'
               className='w-full'
               size='lg'
               onChange={changeFields}
