@@ -51,15 +51,18 @@ export const ComplementariesWrap = () => {
         }
         <div className='flex flex-col gap-4'>
           {
-            complementaries.map(x => (
-              <CardComplementary
-                key={x.id_complementary}
-                id={x.id_complementary}
-                linkFile={x.link_file}
-                title={x.title}
-                idClassroom={id}
-              />
-            ))
+            complementaries.length
+              ? complementaries.map(x => (
+                <CardComplementary
+                  key={x.idComplementary}
+                  id={x.idComplementary}
+                  linkFile={x.linkFile}
+                  title={x.title}
+                  idClassroom={id}
+                  role={role}
+                />
+              ))
+              : <p>No hay complementarios</p>
           }
         </div>
       </section>

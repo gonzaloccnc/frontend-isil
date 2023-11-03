@@ -40,13 +40,12 @@ export const ContentsClass = () => {
       <p>{!contents.length && 'No hay contenidos para este curso'}</p>
       {
         contents.map(x => (
-
           <CardContent
+            key={x.idContent}
             description={x.description}
             idContent={x.id_content}
             linkFile={x.linkFile}
             title={x.numOrder + ' - ' + x.title}
-            key={x.id_content}
           />
         ))
       }

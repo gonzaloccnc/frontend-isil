@@ -5,24 +5,24 @@ import { NextResponse } from 'next/server'
 export const POST = async (req) => {
   const data = await req.formData()
   const token = data.get('token')
-  const image = data.get('link_file')
+  const image = data.get('linkFile')
   const bytes = await image.arrayBuffer()
   const buffer = Buffer.from(bytes)
 
   const complMap = {
     title: '',
-    link_file: '',
+    linkFile: '',
     idClassroom: ''
   }
 
   data.forEach((x, y) => {
-    if (y === 'link_file' || y === 'token') return
+    if (y === 'linkFile' || y === 'token') return
     complMap[y] = x
   })
 
   try {
     const result = await uploadToPromise(buffer, 'auto', 'complementaries')
-    complMap.link_file = result.url
+    complMap.linkFile = result.url
 
     const { data: content } = await axiosServer.post('/user/course/complementaries/create', JSON.stringify(complMap), {
       headers: {

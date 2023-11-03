@@ -6,16 +6,16 @@ export const PATCH = async (req, { params }) => {
   const { id } = params
   const form = await req.formData()
   const token = form.get('token')
-  const image = form.get('link_file')
+  const image = form.get('linkFile')
 
   const compMap = {
     title: '',
-    link_file: form.get('link'),
+    linkFile: form.get('link'),
     idClassroom: ''
   }
 
   form.forEach((x, y) => {
-    if (y === 'token' || y === 'link_file' || y === 'link') return
+    if (y === 'token' || y === 'linkFile' || y === 'link') return
     compMap[y] = x
   })
 
@@ -25,7 +25,7 @@ export const PATCH = async (req, { params }) => {
 
     try {
       const result = await uploadToPromise(buffer, 'auto', 'complementaries')
-      compMap.link_file = result.url
+      compMap.linkFile = result.url
     } catch (ex) {
       NextResponse.json({ ok: false, data: null })
     }

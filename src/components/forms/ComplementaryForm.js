@@ -40,7 +40,7 @@ export const ComplementaryForm = ({ formRef, onClose, onSuccess, initForm = form
           <div>
             <Input
               id='file'
-              name='link_file'
+              name='linkFile'
               type='file'
               key='inside-file'
               variant='bordered'

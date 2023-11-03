@@ -1,11 +1,22 @@
 import { TabClient } from '@/components/tabs/TabClient'
 import { ContentsClass } from './ContentsClass'
 import { ComplementariesWrap } from './ComplementariesWrap'
+import GroupsWrap from './GroupsWrap'
+import { axiosServer } from '@/lib/axios'
+import { cookies } from 'next/headers'
+import AboutClass from './AboutClass'
 
-const OneClassPage = ({ params }) => {
+const OneClassPage = async ({ params }) => {
+  const token = cookies().get('token')
+  const { data: members } = await axiosServer.get(`/user/classroom/members/${params.id}`, {
+    headers: {
+      Authorization: `Bearer ${token.value}`
+    }
+  })
+
   const tabs = [{
     label: 'Sobre esta clase',
-    content: <p>Clase grabadas</p>
+    content: <AboutClass />
   }, {
     label: 'Clases grabadas',
     content: <p>Clase grabadas</p>
@@ -15,6 +26,9 @@ const OneClassPage = ({ params }) => {
   }, {
     label: 'Complementarios',
     content: <ComplementariesWrap />
+  }, {
+    label: 'Grupos',
+    content: <GroupsWrap members={members} />
   }, {
     label: 'Evaluaciones',
     content: <p>Evaluaciones</p>

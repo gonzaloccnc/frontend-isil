@@ -8,7 +8,7 @@ import { axiosClientSameServer } from '@/lib/axios'
 import { useSession } from 'next-auth/react'
 import { UserContext } from '@/context/UserContext'
 
-export const CardComplementary = ({ id, linkFile, title, idClassroom }) => {
+export const CardComplementary = ({ id, linkFile, title, idClassroom, role }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const { data } = useSession()
   const { isOpen: isOpenUpdate, onOpen: onOpenUpdate, onClose: onCloseUpdate, onOpenChange: onOpenChangeUpdate } = useDisclosure()
@@ -27,7 +27,7 @@ export const CardComplementary = ({ id, linkFile, title, idClassroom }) => {
       }
     })
 
-    const filterLess = complementaries.filter(x => x.id_complementary !== id)
+    const filterLess = complementaries.filter(x => x.idComplementary !== id)
 
     setAllComplementaries([...filterLess, updatedComplementary.data])
   }
@@ -46,14 +46,17 @@ export const CardComplementary = ({ id, linkFile, title, idClassroom }) => {
             >
               Ir al documento
             </Button>
-            <Button
-              onPress={onOpenUpdate}
-              variant='bordered'
-              color='primary'
-              className='text-white'
-            >
-              Actualizar
-            </Button>
+            {
+              role === 'PROFESOR' &&
+              <Button
+                onPress={onOpenUpdate}
+                variant='bordered'
+                color='primary'
+                className='text-white'
+              >
+                Actualizar
+              </Button>
+            }
           </div>
         </CardHeader>
       </Card>
