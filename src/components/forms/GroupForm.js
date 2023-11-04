@@ -5,7 +5,7 @@ import { Avatar, Button, Chip, Input, ModalBody, ModalFooter, Select, SelectItem
 import { useState } from 'react'
 
 const initForm = {
-  title: ''
+  groupName: ''
 }
 
 const GroupForm = ({ members, onSuccess, onClose, formRef, init = initForm }) => {
@@ -20,18 +20,18 @@ const GroupForm = ({ members, onSuccess, onClose, formRef, init = initForm }) =>
         <form className='flex flex-col w-[500px] [&>*]:max-w-[500px] gap-10 mb-8' ref={formRef}>
           <div>
             <Input
-              id='title'
+              id='groupName'
               type='text'
-              name='title'
-              key='inside-title'
+              name='groupName'
+              key='inside-groupName'
               labelPlacement='inside'
               label='Nombre del grupo'
               variant='bordered'
               isClearable
               className='w-full'
               size='lg'
-              onClear={() => { clearInput('title') }}
-              value={fields.title}
+              onClear={() => { clearInput('groupName') }}
+              value={fields.groupName}
               onChange={changeFields}
             />
           </div>

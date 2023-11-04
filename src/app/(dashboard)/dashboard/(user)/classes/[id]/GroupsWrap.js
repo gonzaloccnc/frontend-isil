@@ -48,25 +48,24 @@ const GroupsWrap = ({ members }) => {
   const onSuccess = async () => {
     const formData = new FormData(formRef.current)
     const body = {
-      title: '',
+      groupName: '',
       students: []
     }
 
     formData.forEach((x, y) => {
-      if (y === 'title') {
+      if (y === 'groupName') {
         body[y] = x
         return
       }
       const student = {
         idClassroom: id,
-        idStudent: x
+        idStudents: x
       }
       body.students.push(student)
     })
 
     try {
-      console.log(body)
-      const { data } = await axiosClient.post('/', body, {
+      const { data } = await axiosClient.post('/user/groups/create', body, {
         headers: {
           Authorization: `Bearer ${token}`
         }
