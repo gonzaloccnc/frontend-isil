@@ -5,6 +5,7 @@ import GroupsWrap from './GroupsWrap'
 import { axiosServer } from '@/lib/axios'
 import { cookies } from 'next/headers'
 import AboutClass from './AboutClass'
+import { EvaluationsWrap } from './EvaluationsWrap'
 
 const OneClassPage = async ({ params }) => {
   const token = cookies().get('token')
@@ -31,7 +32,7 @@ const OneClassPage = async ({ params }) => {
     content: <GroupsWrap members={members} />
   }, {
     label: 'Evaluaciones',
-    content: <p>Evaluaciones</p>
+    content: <EvaluationsWrap />
   }]
 
   return (
