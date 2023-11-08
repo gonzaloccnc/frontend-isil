@@ -73,7 +73,11 @@ const EvaluationsWrap = () => {
         <div className='flex justify-end mb-4'>
           {
             role === 'PROFESOR' &&
-            <Button color='primary' onPress={onOpen}>
+            <Button
+              color='primary'
+              onPress={onOpen}
+              isDisabled={evaluations.length === 6}
+            >
               Crear examen
             </Button>
           }
@@ -85,6 +89,8 @@ const EvaluationsWrap = () => {
               : renderEvaluations.map(x => {
                 return (
                   <EvaluationCard
+                    setEvaluations={setEvaluations}
+                    idEvaluation={x.idEvaluation}
                     role={role}
                     key={x.idEvaluation}
                     startDate={x.startDate}

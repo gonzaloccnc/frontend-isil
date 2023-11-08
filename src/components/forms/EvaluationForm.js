@@ -49,11 +49,13 @@ const deliverys = [{
   label: 'Grupal'
 }]
 
-export const EvaluationForm = ({ evals, onSuccess, onClose, formRef, initForm = initial }) => {
-  const [loading, setLoading] = useState()
-  const { clearInput, fields, clearAll, changeFields, changeSelect } = useForm(initForm)
+export const EvaluationForm = ({ isUpdated = false, evals, onSuccess, onClose, formRef, initForm = initial }) => {
+  const restEvaluations = evals
+    ? typesEvaluations.filter(typeEval => !evals.some(evalDB => evalDB.type === typeEval.type))
+    : typesEvaluations
 
-  const restEvaluations = typesEvaluations.filter(typeEval => !evals.some(evalDB => evalDB.type === typeEval.type))
+  const { clearInput, fields, clearAll, changeFields, changeSelect } = useForm({ ...initForm, type: isUpdated ? initForm.type : restEvaluations[0].type })
+  const [loading, setLoading] = useState(false)
 
   return (
     <>
@@ -124,6 +126,7 @@ export const EvaluationForm = ({ evals, onSuccess, onClose, formRef, initForm = 
               size='lg'
               selectedKeys={[fields.type]}
               onChange={changeSelect}
+              isDisabled={isUpdated}
             >
               {
                 restEvaluations.map(x => (
@@ -192,7 +195,7 @@ export const EvaluationForm = ({ evals, onSuccess, onClose, formRef, initForm = 
       <ModalFooter>
         <Button color='danger' variant='light'
           onPress={() => {
-            clearAll(initForm)
+            clearAll({ ...initForm, type: isUpdated ? initForm.type : restEvaluations[0].type })
             onClose()
           }}
           isDisabled={loading}
@@ -205,7 +208,7 @@ export const EvaluationForm = ({ evals, onSuccess, onClose, formRef, initForm = 
             setLoading(true)
             await onSuccess()
             setLoading(false)
-            clearAll(initForm)
+            clearAll({ ...initForm, type: isUpdated ? initForm.type : restEvaluations[0].type })
             onClose()
           }}
           isLoading={loading}
