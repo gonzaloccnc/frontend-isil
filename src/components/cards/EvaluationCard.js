@@ -1,6 +1,6 @@
 'use client'
 import { Button, Card, CardBody, CardFooter, Chip, useDisclosure } from '@nextui-org/react'
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { PdfModal } from '../modals/PdfModal'
 import { FormModal } from '../modals/FormModal'
 import { EvaluationForm } from '../forms/EvaluationForm'
@@ -8,15 +8,19 @@ import { format } from 'date-fns'
 import { axiosClient, axiosClientSameServer } from '@/lib/axios'
 import { useParams } from 'next/navigation'
 import { useSession } from 'next-auth/react'
+import { SendEvaluationForm } from '../forms/SendEvaluationForm'
 
 const EvaluationCard = ({ idEvaluation, role, type, startDate, endDate, file, isVisible, itsGroup, setEvaluations }) => {
   const { id } = useParams()
   const { data } = useSession()
   const token = data?.user?.accessToken
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
+  const { isOpen: isOpenSend, onOpen: onOpenSend, onOpenChange: onOpenChangeSend } = useDisclosure()
   const { isOpen: isOpenUpload, onOpen: onOpenUpload, onOpenChange: onOpenChageUpload, onClose: onCloseUpload } = useDisclosure()
   const { isOpen: isOpenUpdate, onOpen: onOpenUpdate, onOpenChange: onOpenChageUpdate, onClose: onCloseUpdate } = useDisclosure()
   const formRefUpdate = useRef(null)
+  const formRefUpload = useRef(null)
+  const [sendedEvaluation, setSendedEvaluation] = useState(null)
 
   const onUpdate = async () => {
     const formData = new FormData(formRefUpdate.current)
@@ -62,6 +66,36 @@ const EvaluationCard = ({ idEvaluation, role, type, startDate, endDate, file, is
     }
   }
 
+  const onUpload = async () => {
+    const formData = new FormData(formRefUpload.current)
+    formData.append('resource', 'sendEvaluations')
+    const body = {
+      linkFile: ''
+    }
+
+    try {
+      const { data } = await axiosClientSameServer.post('/file', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+
+      body.linkFile = data.data
+
+      const { data: sendEva } = await axiosClient.post(`/user/evaluations/upload/${idEvaluation}`, body, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      console.log(sendEva)
+      if (sendEva) {
+        setSendedEvaluation(sendEva)
+      }
+    } catch (ex) {
+
+    }
+  }
+
   return (
     <>
       <Card>
@@ -88,6 +122,18 @@ const EvaluationCard = ({ idEvaluation, role, type, startDate, endDate, file, is
             <Chip>
               Tipo de entrega: {itsGroup ? 'Grupal' : 'Individual'}
             </Chip>
+            {
+              sendedEvaluation &&
+              <Chip>
+
+                {
+                  sendedEvaluation.sendUpdateDate
+                    ? `Fecha de modificación: ${sendedEvaluation.sendUpdateDate}`
+                    : `Fecha de entrega: ${sendedEvaluation.sendDate}`
+                }
+
+              </Chip>
+            }
           </div>
         </CardBody>
         <CardFooter className='flex items-center gap-2'>
@@ -108,8 +154,8 @@ const EvaluationCard = ({ idEvaluation, role, type, startDate, endDate, file, is
                   Actualizar
                 </Button>
               </div>
-              : <Button color='secondary' onPress={onOpenUpload}>
-                Subir entrega
+              : <Button color='secondary' onPress={sendedEvaluation ? onOpenSend : onOpenUpload}>
+                {sendedEvaluation ? 'Ver entrega' : 'Subir mi entrega'}
               </Button>
           }
         </CardFooter>
@@ -120,6 +166,16 @@ const EvaluationCard = ({ idEvaluation, role, type, startDate, endDate, file, is
         isOpen={isOpen}
         onOpenChange={onOpenChange}
       />
+
+      {
+        sendedEvaluation &&
+        <PdfModal
+          key='evaluation-sended'
+          file={sendedEvaluation.linkFile}
+          isOpen={isOpenSend}
+          onOpenChange={onOpenChangeSend}
+        />
+      }
 
       <FormModal
         key='update-eval'
@@ -154,7 +210,11 @@ const EvaluationCard = ({ idEvaluation, role, type, startDate, endDate, file, is
         onOpenChange={onOpenChageUpload}
         title='Subir mi entrega'
       >
-        <div onClick={onCloseUpload}>close</div>
+        <SendEvaluationForm
+          formRef={formRefUpload}
+          onSuccess={onUpload}
+          onClose={onCloseUpload}
+        />
       </FormModal>
     </>
   )

@@ -1,7 +1,15 @@
 'use client'
 
 import { useForm } from '@/hooks/useForm'
-import { Button, Input, ModalBody, ModalFooter, Select, SelectItem } from '@nextui-org/react'
+import {
+  Button,
+  Input,
+  ModalBody,
+  ModalFooter,
+  Select,
+  SelectItem
+} from '@nextui-org/react'
+import { format } from 'date-fns'
 import { useState } from 'react'
 
 const initial = {
@@ -13,48 +21,73 @@ const initial = {
   itsGroup: '0'
 }
 
-const typesEvaluations = [{
-  type: 'EP1',
-  label: 'Evaluación Permanente 1'
-}, {
-  type: 'EP2',
-  label: 'Evaluación Permanente 2'
-}, {
-  type: 'EP3',
-  label: 'Evaluación Permanente 3'
-}, {
-  type: 'EP4',
-  label: 'Evaluación Permanente 4'
-}, {
-  type: 'PARCIAL',
-  label: 'Evaluación Parcial'
-}, {
-  type: 'FINAL',
-  label: 'Evaluación Final'
-}]
+const typesEvaluations = [
+  {
+    type: 'EP1',
+    label: 'Evaluación Permanente 1'
+  },
+  {
+    type: 'EP2',
+    label: 'Evaluación Permanente 2'
+  },
+  {
+    type: 'EP3',
+    label: 'Evaluación Permanente 3'
+  },
+  {
+    type: 'EP4',
+    label: 'Evaluación Permanente 4'
+  },
+  {
+    type: 'PARCIAL',
+    label: 'Evaluación Parcial'
+  },
+  {
+    type: 'FINAL',
+    label: 'Evaluación Final'
+  }
+]
 
-const visibilities = [{
-  visibility: '0',
-  label: 'No mostrar a los estudiantes'
-}, {
-  visibility: '1',
-  label: 'Mostrar a los estudiantes'
-}]
+const visibilities = [
+  {
+    visibility: '0',
+    label: 'No mostrar a los estudiantes'
+  },
+  {
+    visibility: '1',
+    label: 'Mostrar a los estudiantes'
+  }
+]
 
-const deliverys = [{
-  delivery: '0',
-  label: 'Individual'
-}, {
-  delivery: '1',
-  label: 'Grupal'
-}]
+const deliverys = [
+  {
+    delivery: '0',
+    label: 'Individual'
+  },
+  {
+    delivery: '1',
+    label: 'Grupal'
+  }
+]
 
-export const EvaluationForm = ({ isUpdated = false, evals, onSuccess, onClose, formRef, initForm = initial }) => {
+export const EvaluationForm = ({
+  isUpdated = false,
+  evals,
+  onSuccess,
+  onClose,
+  formRef,
+  initForm = initial
+}) => {
   const restEvaluations = evals
-    ? typesEvaluations.filter(typeEval => !evals.some(evalDB => evalDB.type === typeEval.type))
+    ? typesEvaluations.filter(
+      (typeEval) => !evals.some((evalDB) => evalDB.type === typeEval.type)
+    )
     : typesEvaluations
 
-  const { clearInput, fields, clearAll, changeFields, changeSelect } = useForm({ ...initForm, type: isUpdated ? initForm.type : restEvaluations[0].type })
+  const { clearInput, fields, clearAll, changeFields, changeSelect } = useForm({
+    ...initForm,
+    type: isUpdated ? initForm.type : restEvaluations[0].type
+  })
   const [loading, setLoading] = useState(false)
 
   return (
@@ -73,7 +106,11 @@ export const EvaluationForm = ({ isUpdated = false, evals, onSuccess, onClose, f
               isClearable
               className='w-full'
               size='lg'
-              onClear={() => { clearInput('startDate') }}
+              onClear={() => {
+                clearInput('startDate')
+              }}
+              min={format(new Date(), "yyyy-MM-dd'T'HH:mm")}
+              max={`${new Date().getFullYear()}-12-23T12:00`}
               value={fields.startDate}
               onChange={changeFields}
             />
@@ -91,7 +128,12 @@ export const EvaluationForm = ({ isUpdated = false, evals, onSuccess, onClose, f
               isClearable
               className='w-full'
               size='lg'
-              onClear={() => { clearInput('endDate') }}
+              onClear={() => {
+                clearInput('endDate')
+              }}
+              min={format(new Date(), "yyyy-MM-dd'T'HH:mm")}
+              max='2023-12-23T12:00'
+              errorMessage={(new Date(fields.endDate) < new Date(fields.startDate) || fields.endDate === fields.startDate) && 'Las fechas esta incorrectas'}
               value={fields.endDate}
               onChange={changeFields}
             />
@@ -110,7 +152,9 @@ export const EvaluationForm = ({ isUpdated = false, evals, onSuccess, onClose, f
               isClearable
               className='w-full'
               size='lg'
-              onClear={() => { clearInput('linkFile') }}
+              onClear={() => {
+                clearInput('linkFile')
+              }}
               value={fields.linkFile}
               onChange={changeFields}
             />
@@ -128,16 +172,11 @@ export const EvaluationForm = ({ isUpdated = false, evals, onSuccess, onClose, f
               onChange={changeSelect}
               isDisabled={isUpdated}
             >
-              {
-                restEvaluations.map(x => (
-                  <SelectItem
-                    key={x.type}
-                    value={x.type}
-                  >
-                    {x.label}
-                  </SelectItem>
-                ))
-              }
+              {restEvaluations.map((x) => (
+                <SelectItem key={x.type} value={x.type}>
+                  {x.label}
+                </SelectItem>
+              ))}
             </Select>
           </div>
 
@@ -152,16 +191,11 @@ export const EvaluationForm = ({ isUpdated = false, evals, onSuccess, onClose, f
               selectedKeys={[fields.isVisible]}
               onChange={changeSelect}
             >
-              {
-                visibilities.map(x => (
-                  <SelectItem
-                    key={x.visibility}
-                    value={x.visibility}
-                  >
-                    {x.label}
-                  </SelectItem>
-                ))
-              }
+              {visibilities.map((x) => (
+                <SelectItem key={x.visibility} value={x.visibility}>
+                  {x.label}
+                </SelectItem>
+              ))}
             </Select>
           </div>
 
@@ -176,26 +210,24 @@ export const EvaluationForm = ({ isUpdated = false, evals, onSuccess, onClose, f
               selectedKeys={[fields.itsGroup]}
               onChange={changeSelect}
             >
-              {
-                deliverys.map(x => (
-                  <SelectItem
-                    key={x.delivery}
-                    value={x.delivery}
-                  >
-                    {x.label}
-                  </SelectItem>
-                ))
-              }
+              {deliverys.map((x) => (
+                <SelectItem key={x.delivery} value={x.delivery}>
+                  {x.label}
+                </SelectItem>
+              ))}
             </Select>
           </div>
-
         </form>
-
       </ModalBody>
       <ModalFooter>
-        <Button color='danger' variant='light'
+        <Button
+          color='danger'
+          variant='light'
           onPress={() => {
-            clearAll({ ...initForm, type: isUpdated ? initForm.type : restEvaluations[0].type })
+            clearAll({
+              ...initForm,
+              type: isUpdated ? initForm.type : restEvaluations[0].type
+            })
             onClose()
           }}
           isDisabled={loading}
@@ -208,11 +240,14 @@ export const EvaluationForm = ({ isUpdated = false, evals, onSuccess, onClose, f
             setLoading(true)
             await onSuccess()
             setLoading(false)
-            clearAll({ ...initForm, type: isUpdated ? initForm.type : restEvaluations[0].type })
+            clearAll({
+              ...initForm,
+              type: isUpdated ? initForm.type : restEvaluations[0].type
+            })
             onClose()
           }}
           isLoading={loading}
-          isDisabled={loading}
+          isDisabled={loading || fields.endDate === fields.startDate || new Date(fields.endDate) < new Date(fields.startDate)}
         >
           Guardar
         </Button>
