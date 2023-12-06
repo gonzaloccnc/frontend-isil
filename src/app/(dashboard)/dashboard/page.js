@@ -1,8 +1,19 @@
 import { provider } from '@/app/api/auth/[...nextauth]/route'
 import { getServerSession } from 'next-auth'
+import { ClassesOfDay } from './items/ClassesOfDay'
+import { Suspense } from 'react'
+import { Calendar } from './items/Calendar'
+import { Evaluations } from './items/Evaluations'
+import { cookies } from 'next/headers'
+import { verifyToken } from '@/lib/jwtUtils'
 
 const DashboardHomePage = async () => {
-  const session = await getServerSession(provider)
+  const token = cookies().get('token')
+  const [payload, session] = await Promise.all([
+    verifyToken(token.value),
+    getServerSession(provider)
+  ])
+
   const username = session.user.name.split(' ')[0] + ' ' + session.user.name.split(' ')[2]
 
   return (
@@ -34,27 +45,47 @@ const DashboardHomePage = async () => {
       </section>
 
       <section className='bg-dark-secondary rounded-lg p-4'>
-        progreso
+        <div>
+          Estamos trabajando para que pueda ver esta funcionalizadad en su dashboard
+        </div>
       </section>
 
       <section className='bg-dark-secondary rounded-lg p-4 row-dash-statistics col-dash-statistics'>
-        estadisticas
+        <Suspense fallback={<div>loading</div>}>
+          <Evaluations
+            idStudent={payload.id}
+            token={token.value}
+            isStudent={payload.role === 'ALUMNO'}
+          />
+        </Suspense>
       </section>
 
       <section className='bg-dark-secondary rounded-lg p-4'>
-        clases del dia
+        <Suspense fallback={<div>loading</div>}>
+          <ClassesOfDay
+            idStudent={payload.id}
+            token={token.value}
+            isStudent={payload.role === 'ALUMNO'}
+          />
+        </Suspense>
       </section>
 
       <section className='bg-dark-secondary rounded-lg p-4'>
-        calendario
+        <Suspense fallback={<div>loading</div>}>
+          <Calendar />
+        </Suspense>
       </section>
 
       <section className='bg-dark-secondary rounded-lg p-4'>
-        to do list
+        <div>
+          Estamos trabajando para que pueda ver esta funcionalizadad en su dashboard
+        </div>
       </section>
 
       <section className='bg-dark-secondary rounded-lg p-4'>
-        foros
+        <div>
+          Estamos trabajando para que pueda ver esta funcionalizadad en su dashboard
+        </div>
       </section>
     </section>
   )
